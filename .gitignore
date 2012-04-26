@@ -1,0 +1,7 @@
+*.o
+*.s
+*.image
+*.sw*
+*.bak
+*.lst
+*.nl
