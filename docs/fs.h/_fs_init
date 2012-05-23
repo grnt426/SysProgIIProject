@@ -1,0 +1,27 @@
+_fs_init() - DERP OS man page
+
+Name -------------------
+_fs_init() - Initialize global ATA devices
+
+Synopsis ---------------
+
+#include "fs.h"
+
+void _fs_init(void);
+
+Description ------------
+
+The _fs_init() function initializes all of the ATA devices found during the
+boot process. This is accomplished by probing the ATA device for DERP_FS
+partitions. If no ATA devices or DERP_FS filesystems are found, an error
+message is printed to the console.
+
+Return Value -----------
+
+[ None ]
+
+Errors -----------------
+
+If no ATA devices are found, an error message is printed to the console.
+If no DERP_FS partitions are found, an error message is printed to the console.
+Neither condition is troublesome enough to warrant stopping the system.

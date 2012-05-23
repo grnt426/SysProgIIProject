@@ -23,6 +23,9 @@
 
 #include "pcbs.h"
 
+extern Uint32 stack_copy_reserve[ STACK_SIZE / 1024 ];
+extern Uint32 stack_copy_reserve_size;
+
 /*
 ** Prototypes
 */
@@ -63,6 +66,11 @@ Status _create_process( Pcb *pcb, Uint32 entry );
 */
 
 void _init( void );
+
+/*
+** _isr_usb_pull - catches the usb being pull out and then ignores it
+*/
+void _isr_usb_pull( int vector, int code );
 
 #endif
 

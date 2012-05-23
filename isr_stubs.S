@@ -108,7 +108,6 @@ isr_save:
 
 	movl	_current, %edx	// save context pointer for the current proc
 	movl	%esp, (%edx)	// (must be the first PCB field)
-
 	movl	_system_esp, %esp	// switch to OS stack
 
 /*
@@ -118,6 +117,8 @@ isr_save:
 	pushl	%ebx		// put vector & code on top of the stack ...
 	pushl	%eax		// ... as parameters for the ISR
 
+
+	
 /*
 ** Call the ISR
 */
@@ -166,23 +167,27 @@ __isr_restore:
 	** THE CONSTANT IN THIS movl INSTRUCTION MUST BE CHANGED
 	** IF THE LOCATION OF EITHER FIELD IN THE PCB CHANGES!
 	*/
-
-	movl	12(%ebx), %eax	// get PID and PPID of this process
+	/*
+	movl	16(%ebx), %eax	// get PID and PPID of this process
 	pushl	%eax
 	pushl	_system_time	// and the current system time
+	*/
 
 /*
 ** END MOD for 20113 SP2
 */
-
+/*
 	pushl	$fmt
 	pushl	$1
 	pushl	$0
 	call	c_printf_at
+	*/
 /*
 ** MOD for 20113 SP2
 */
+	/*
 	addl	$20, %esp	// now five things to remove
+	*/
 /*
 ** END MOD for 20113 SP2
 */

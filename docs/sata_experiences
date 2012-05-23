@@ -1,0 +1,99 @@
+Benjamin Russell
+
+The process of creating a SATA was a tricky experience with lots of thought
+provoking experiences. As mentioned in the group presentation, the ultimate
+goal of building a SATA driver was much like building a building. Each layer
+contributed another piece of the puzzle allowing the subsequent piece to be
+constructed.
+
+Step 1) Communication with the PCI bus
+This was a step that was jointly accomplished between Grant and Ben. The 
+functions necessary for writing and reading from the PCI bus registers were
+a major break through for talking with and enumerating the PCI bus. It was
+interesting to look through all the devices and essentially repeat the goals
+of lspci. However, it became frustrating that the subclass codes for devices
+were often much more generic than anticipated, and prevented a very accurate
+enumeration of the bus.
+
+Step 2) Communication with the SATA/IDE Controller
+The is step encountered much magic that was constructed by wizards on the
+interwebs. After trawling through the documentation for the SATA controller,
+studying the OSDev Wiki, and some experimentation, it was determined that
+although AHCI was supported by the SATA controllers, it was not actually
+implemented on them. This was a major set back and necessitated a change in
+plans for the entire team. Since the IDE and SATA drives would both need the
+same sort of commands, it was deemed too similar, so Ben continued with HDD
+and Grant continued on with PS2 support. 
+
+This is also where some confusion was found. The SATA drive was initialized
+with non-standard IO port values, which was much appreciated. However, the IDE
+controller was only partially initialized, necessitating writing to tell it
+what ports to respond on. This caused an unavoidable 0x2E interrupt to be
+thrown, so some logic had to be implemented to narrow the goals of the project
+to disallow IDE drives.
+
+Step 3) Communication with the hard drives themselves
+Communication with harddrives seems fairly simplistic at first, but guides
+online proved to be more confounding than expected. However, once the
+overall similarities between guides could be compiled, a true original design
+could be built. This allowed the project to enumerate the hard drives and
+learn all kinds of information about the drives. The most important aspects of
+the drive were kept, but most of the data from the drive was thrown out as
+not necessary.
+
+The most important portion of this project was being able to tell the hard
+drive to write or read. However, this was no simple task. There are three
+different methods necessary for addressing the hard drive. Since we only have
+large 1Tb hard drives, it was determined that to save time only the newest of
+these standards would be implemented to allow addressing of all 1Tb of the
+hard drive. This cut down the development time, but also decreased the
+genericness of the project. With more time, LBA-24 and CHS addressing would
+be attempted to allow access to older, smaller drives.
+
+Step 4) Building a library for interfacing with HDDs
+The next step was to wrap these read/write function in a library that could
+address any drive in the system. The unfortunate side effect of the reading
+and writing library was that a polling IO method was used as the sole method
+of interacting with the disk. This prevented the OS from performing any other
+task while it was requesting disk IO, and slowed down the process of creating
+and formatting filesystems to less than a turtle's crawl.
+
+Step 5) Building a File System
+This was probably the most thought provoking challenge of the project. Although
+the required prereq OS1 involves creating a filesystem, the FAT partition seeme
+too complicated and not particularly 'correct' for the project. A few hours
+were spent designing a filesystem that would be simple to implement and
+simple for logical divisions of the disk. "Simple" of course was an
+understatement, and many addendums and corrections to the filesystem design
+were written up on the whiteboard. The constant changes proved to be
+frustrating, as most caused a refactoring of the filesystem librarys. This was
+also the most bug-prone portion of the project as it used a lot of tricky math
+that was often off by a factor of one due to simple things like forgetting to
+factor in the boot record or 1 indexing vs 0 indexing. These were some long
+hours spent in the DSL staring at code and running between the test machine and
+the development machine with a usb stick in one hand and a caffeinated beverage
+in the other.
+
+Step 6) Building a library for user-level file system calls
+The next step was to wrap the filesystem function in a set of calls that would
+be friendly for the average C programmer. This code was probably where the most
+grevious violations of user lever/kernel level calls happened. The decision to
+avoid disk overhead by buffering a sector per file was a tricky one to
+implement. It also required that calls like fflush and fopen be able to read
+and write raw sectors to the hard drive. Although the scope of this OS was by
+no means an enterprise or bullet-proof OS, the thought of security and
+protection of the hardware was often on the brain while developing this part of
+the system.
+
+Step 7) Building a user-level shell for management of files
+What is the good of a filesystem and a robust API for programming in it if you
+can't show it off? To remedy this situation, a very simple shell-like program
+was built to integrate together the keyboard project and the sata project. A
+set of unix-like filesystem commands were implemented and build to create/delete
+and write to files in the filesystem as well as display information about the
+global state of the os. The functions use a little kernel level code as
+possible and do as much using the user-level f* functions. This was probably
+the easiest part of the project, since it was quite simple to actually develop
+in an environment that was familiar to C programmers. With the addition of a
+few standard library functions, the development just flew, and within a couple
+days a robust way of demonstrating the project was constructed.

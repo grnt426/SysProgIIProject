@@ -1,0 +1,28 @@
+_fs_delete_file() - DERP OS man page
+
+Name -------------------
+_fs_delete_file() - Deletes a file from the filesystem
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FS_STATUS _fs_delete_file(FILE *file);
+
+Description ------------
+
+The _fs_delete_file() function performs a deletion of the file specified by file
+from the filesystem. This means, erasing the name and fspointer allocations
+from the index blocks of the filesystem. This also traverses the linked-list
+style filesystem and unallocates each sector of the file.
+
+file - A pointer to the file that is to be deleted
+
+Return Value -----------
+
+Upon successful deletion of the file, FS_SUCCESS will be returned.
+
+Errors -----------------
+
+If file->code is equal to FS_AVAILABLE, indicating that the file is an
+unused pointer in the global array, FS_ERR_BADFILE is returned.

@@ -1,0 +1,34 @@
+fwrite() - DERP OS man page
+
+Name -------------------
+fwrite() - read bytes from a file into a buffer
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+Uint32 fwrite(FILE *file, char *buffer, Uint32 size);
+
+Description ------------
+
+The fwrite() function writes bytes to the filepointer specified by file from
+the character array specified by buffer. The number specified by size is the
+number of bytes to write to the file. File writing starts at the internal
+pointer of the file.
+
+If writingg of size bytes would cause writing past the end of the file, the
+file is expanded to contain the bytes written. This will update the size of the
+file, as well. Writing may cause a new sector to be allocated or may cross into
+an adjacent sector of the file. This will cause the internal buffer to be 
+flushed and if necessary a new sector to be allocated. In both situations, the
+internal buffer will be updated with the new sector.
+
+Return Value -----------
+
+Upon successful writing of the file, the number of bytes written will be
+returned.
+
+Errors -----------------
+
+0 will be returned if the filepointer specified by file is NULL or if
+file->code is set to FS_AVAILABLE.

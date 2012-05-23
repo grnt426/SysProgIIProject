@@ -1,0 +1,33 @@
+fread() - DERP OS man page
+
+Name -------------------
+fread() - read bytes from a file into a buffer
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+Uint32 fread(FILE *file, char *buffer, Uint32 size);
+
+Description ------------
+
+The fread() function reads bytes from the filepointer specified by file into
+the character array specified by buffer. At maximum, size bytes will be read
+into the array. Reading starts from the internal pointer of the file.
+
+If reading of size bytes would cause reading past the end of the file, as many
+bytes as can be read from the file will be read into the buffer and the number
+of bytes read will be returned. If reading will cause reading into an adjacent
+sector of the file, the filepointer's internal buffer will be flushed and
+updated with the next sector's information.
+
+Return Value -----------
+
+Upon successful reading of the file, the number of bytes read will be returned.
+If this is less than the number specified in size, it is because the number of
+bytes in size would cause reading past the end of the file.
+
+Errors -----------------
+
+0 will be returned if the filepointer specified by file is NULL or if
+file->code is set to FS_AVAILABLE.

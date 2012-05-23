@@ -84,8 +84,8 @@ clearbss:
 /*
 ** Initialize devices
 */
-	call	_init		// initialize the OS
 
+	call	_init		// initialize the OS
 /*
 ** Restore the first user process context
 **
@@ -219,3 +219,9 @@ __pause:
 	hlt
 	leave
 	ret
+
+	.globl __get_end
+__get_end:
+	movl	$_end, %eax
+	ret
+	

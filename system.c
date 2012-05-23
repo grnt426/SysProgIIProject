@@ -14,6 +14,7 @@
 
 #include "headers.h"
 
+#include "startup.h"
 #include "system.h"
 #include "clock.h"
 #include "pcbs.h"
@@ -21,12 +22,24 @@
 #include "syscalls.h"
 #include "sio.h"
 #include "scheduler.h"
+#include "vga_dr.h"
+#include "gl.h"
+#include "win_man.h"
+#include "vmem.h"
+#include "vmemL2.h"
+#include "vmem_isr.h"
+#include "vmem_ref.h"
+#include "pci.h"
+#include "fs.h"
 
 // need init() address
 #include "users.h"
 
 // need the exit() prototype
 #include "ulib.h"
+
+Uint32 stack_copy_reserve[ STACK_SIZE / 1024 ];
+Uint32 stack_copy_reserve_size = STACK_SIZE / 1024;
 
 /*
 ** PUBLIC FUNCTIONS
@@ -62,19 +75,17 @@ void _cleanup( Pcb *pcb ) {
 		return;
 	}
 
-	if( pcb->stack != NULL ) {
-		status = _stack_dealloc( pcb->stack );
-		if( status != SUCCESS ) {
-			_kpanic( "_cleanup", "stack dealloc status %s\n", status );
-		}
-	}
+	//change to defualt page 
+	_vmeml2_change_page( (Uint32)_vmem_page_dir );
+	//release the old page
+	_vmeml2_release_page_dir( pcb->pdt );
 
+	//deallocate the pcb
 	pcb->state = FREE;
 	status = _pcb_dealloc( pcb );
 	if( status != SUCCESS ) {
 		_kpanic( "_cleanup", "pcb dealloc status %s\n", status );
 	}
-
 }
 
 
@@ -104,11 +115,12 @@ Status _create_process( Pcb *pcb, Uint32 entry ) {
 
 	stack = pcb->stack;
 	if( stack == NULL ) {
-		stack = _stack_alloc();
+		__panic( "No stack?");
+		/*stack = _stack_alloc();
 		if( stack == NULL ) {
 			return( ALLOC_FAILED );
 		}
-		pcb->stack = stack;
+		pcb->stack = stack;*/
 	}
 
 	// clear the stack
@@ -200,8 +212,8 @@ void _init( void ) {
 	/*
 	** Console I/O system.
 	*/
-
-	c_io_init();
+	
+	c_io_init();	
 	c_setscroll( 0, 7, 99, 99 );
 	c_puts_at( 0, 6, "================================================================================" );
 
@@ -216,11 +228,20 @@ void _init( void ) {
 	c_puts( "Module init: " );
 
 	_q_init();		// must be first
-	_pcb_init();
-	_stack_init();
+	_vmem_init();
+	_vmeml2_init();
+	_vmem_ref_init();
 	_sio_init();
+	_pcb_init();
+	_win_man_init();	
+		//vga_init
+		//gl_init
+
 	_syscall_init();
 	_sched_init();
+	_pci_init();
+	_fs_init();
+	_ps2_keyboard_init();
 	_clock_init();
 
 	c_puts( "\n" );
@@ -241,6 +262,9 @@ void _init( void ) {
 	__install_isr( INT_VEC_TIMER, _isr_clock );
 	__install_isr( INT_VEC_SYSCALL, _isr_syscall );
 	__install_isr( INT_VEC_SERIAL_PORT_1, _isr_sio );
+	__install_isr( INT_VEC_GENERAL_PROTECTION, _isr_vmem_general_protect );
+	__install_isr( INT_VEC_PAGE_FAULT, _isr_vmem_page_fault);
+	__install_isr( 0x2A, _isr_usb_pull);
 
 	/*
 	** Create the initial process
@@ -256,10 +280,26 @@ void _init( void ) {
 		_kpanic( "_init", "first pcb alloc failed\n", FAILURE );
 	}
 
-	pcb->stack = _stack_alloc();
-	if( pcb->stack == NULL ) {
-		_kpanic( "_init", "first stack alloc failed\n", FAILURE );
+	
+	//create reserve address for copying
+	int r;
+	for ( r = 0; r < stack_copy_reserve_size; r++ )
+	{	
+		Uint32 page =_vmem_get_next_reserve_address();
+		stack_copy_reserve[r] = page;
+		_vmem_set_address( stack_copy_reserve[r] );
 	}
+
+	//setup paging ans stack for idle process
+	pcb->pdt = _vmeml2_create_page_dir();
+	Uint32* ptable=_vmeml2_create_page_table( pcb->pdt, ( STACK_ADDRESS / PAGE_TABLE_SIZE)  );
+	 _vmeml2_create_page( ptable, 0 );
+	 _vmeml2_create_page( ptable, 1 );
+	 _vmeml2_create_page( ptable, 2 );
+	 _vmeml2_create_page( ptable, 3 );
+	pcb->stack = (Stack*) ( STACK_ADDRESS);
+
+	_vmeml2_change_page( (Uint32) pcb->pdt );
 
 	/*
 	** Next, set up various PCB fields
@@ -299,4 +339,13 @@ void _init( void ) {
 
 	c_puts( "System initialization complete.\n" );
 
+}
+
+
+/*
+** _isr_usb_pull - catches the usb being pull out and then ignores it
+*/
+void _isr_usb_pull( int vector, int code )
+{
+	__outb( PIC_MASTER_CMD_PORT, PIC_EOI );
 }

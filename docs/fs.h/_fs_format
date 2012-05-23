@@ -1,0 +1,28 @@
+_fs_format() - DERP OS man page
+
+Name -------------------
+_fs_format() - Format a partition with DERP_FS
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FS_STATUS _fs_format(MountPoint *mp, ATADevice *dev, Uint8 index);
+
+Description ------------
+
+The _fs_format() function formats a pregenerated partition with DERP_FS. This
+creates all the necessary index blocks across all the of the partition. It can
+be a very lengthy process if the partition is larger than 10Mb. The mountpoint
+to store the newly formatted partition is stored in the global MountPoint
+element specified by mp. The device that the partition to be formatted lives on
+is specified by dev. The index of the partition in the master boot record is
+specified by index. 
+
+Return Value -----------
+
+Upon successful format of the partition, FS_SUCCESS will be returned.
+
+Errors -----------------
+
+Nothing can error out this function.

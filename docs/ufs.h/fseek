@@ -1,0 +1,46 @@
+fseek() - DERP OS man page
+
+Name -------------------
+fseek() - reposition a filepointer
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FS_STATUS fseek(FILE *file, Uint32 offset, FS_FILE_SEEK dir);
+
+Description ------------
+
+The fdelete() function sets the internal pointer of the filepointer specified
+by file. The position is calculated depenedant upon the current position of the
+internal pointer, the number of bytes to seek, specified by offset, and the
+direction to seek, specified by dir. 
+
+If dir is set to FS_SEEK_ABS, the internal pointer will be set to the value of
+offset. This seeks to an absolute position in the file, relative to the
+beginning of the file.
+
+If dir is set to FS_SEEK_REL, the internal pointer will be set to the current
+value of the internal pointer plus the value of offset. This seeks to a
+position in the file relative to the current position.
+
+If dir is set to FS_SEEK_REL_REV, the internal pointer will be set to the
+current value of the internal pointer minus the value of offset. This seeks to
+a position in the file reverse, relative to the current position.
+
+If seeking within the file will cause seeking into a sector different than the
+one that is already buffered, the filepointer will be flushed and the new
+sector will be stored in the file's buffer.
+
+Return Value -----------
+
+Upon successful seeking of the file, FS_SUCCESS will be returned. Other
+statuses are returned on error conditions.
+
+Errors -----------------
+
+If the file was NULL or file->code was FS_AVAILABLE, FS_ERR_BADFILE will be
+returned.
+
+If the calculated offset of the file is outside the size of the file,
+FS_INVALID_OFFSET will be returned.

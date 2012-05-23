@@ -21,8 +21,9 @@
 #include "types.h"
 
 #include "c_io.h"
+#include "vga_dr.h"
+#include "win_man.h"
 #include "support.h"
-
 
 #ifdef __KERNEL__20113__
 

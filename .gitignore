@@ -1,0 +1,11 @@
+*.s
+*.sw*
+*.o
+*.bak
+tags
+useful
+*.lst
+BuildImage
+*.image
+*.nl
+*.b

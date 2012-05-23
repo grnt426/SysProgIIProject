@@ -1,0 +1,40 @@
+_fs_create_partition() - DERP OS man page
+
+Name -------------------
+_fs_create_partition() - Creates a partition on the master boot record
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FS_STATUS _fs_create_partition(ATADevice *dev, Uint32 start, Uint32 size,
+	Uint8 index);
+
+Description ------------
+
+The _fs_create_partition() function creates a partition of the ATADevice 
+specified by dev.
+
+The partition will begin at the sector specified by start. The partition will
+be the number of sectors in length specified by size. The partition will be
+the nth partition specified by index to be defined on the master boot record.
+
+If the size is not evenly divisible by FS_SECT_PER_IB, the partition will be
+expanded to the next largest multiple of FS_SECT_PER_IB.
+
+Return Value -----------
+
+Upon successful creation of the partition, FS_SUCCESS will be returned.
+
+Errors -----------------
+
+If the index is greater than the maximum number of primary partitions of a
+standard MBR, FS_ERR_BADINDEX is returned.
+
+If the size of the partition is less than or equal to 4, FS_ERR_TOOSMALL is
+returned.
+
+If the size of the partition is larger than the ATADevice OR the size plus
+the start of the partition is larger than the ATADevice, FS_ERR_TOOBIG is
+returned.
+

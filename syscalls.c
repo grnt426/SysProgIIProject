@@ -19,8 +19,11 @@
 #include "sio.h"
 #include "syscalls.h"
 #include "system.h"
+#include "vmemL2.h"
+#include "vmem.h"
 
 #include "startup.h"
+#include "keyboard.h"
 
 /*
 ** PRIVATE DEFINITIONS
@@ -76,7 +79,6 @@ Queue *_sleeping;
 
 static void _sys_fork( Pcb *pcb ) {
 	Pcb *new;
-	int diff;
 	Uint32 *ptr;
 	Status status;
 
@@ -92,87 +94,52 @@ static void _sys_fork( Pcb *pcb ) {
 
 	_kmemcpy( (void *)new, (void *)pcb, sizeof(Pcb) );
 
-	// allocate a stack for the new process
 
-	new->stack = _stack_alloc();
-	if( new->stack == NULL ) {
-		RET(pcb) = FAILURE;
-		_cleanup( new );
-		return;
+	//create a new stack for the new process
+	//this entails a new directory and pages
+	new->pdt = _vmeml2_create_page_dir();
+	Uint32* ptable=_vmeml2_create_page_table( new->pdt, ( STACK_ADDRESS / PAGE_TABLE_SIZE)  );
+	_vmeml2_create_page( ptable, 0 );
+	_vmeml2_create_page( ptable, 1 );
+	_vmeml2_create_page( ptable, 2 );
+	_vmeml2_create_page( ptable, 3 );
+	new->stack = (Stack*) ( STACK_ADDRESS);
+
+	//copy over the old stack to the intermediatry 
+	//we will move later to avoid unnesscary switching of page table directories
+	int s;
+	for( s= 0; s < stack_copy_reserve_size; s++ )
+	{
+		_kmemcpy( (void *)stack_copy_reserve[s], (void *)((Uint32)( pcb->stack) + (PAGE_SIZE * s)), PAGE_SIZE);
 	}
 
-	// duplicate the parent's stack
-
-	_kmemcpy( (void *)new->stack, (void *)pcb->stack, sizeof(Stack));
-
+	
 	// fix the pcb fields that should be unique to this process
 
 	new->pid = _next_pid++;
 	new->ppid = pcb->pid;
 	new->state = NEW;
-
-	/*
-	** We duplicated the parent's stack contents, which means that
-	** the child's ESP and EBP are still pointing into the parent's
-	** stack.  Fix these, and also fix the child's context pointer.
-        **
-        ** We have to change EBP because that's how the compiled code for
-        ** the user process accesses its local variables.  If we didn't
-        ** change this, as soon as the child was dispatched, it would
-        ** start to stomp on the local variables in the parent's stack.
-	** We also have to fix the EBP chain in the child process.
-        **
-        ** None of this would be an issue if we were doing "real" virtual
-        ** memory, as we would be talking about virtual addresses here rather
-        ** than physical addresses, and all processes would share the same
-        ** virtual address space layout.
-	**
-	** First, determine the distance (in bytes) between the two
-	** stacks.  This is the adjustment value we must add to the
-	** three pointers to correct them.
-	*/
-
-	diff = (void *) new->stack - (void *) pcb->stack;
-
-	// adjust the context pointer, esp, and ebp
-
-	new->context = (Context *) ( (void *) new->context + diff );
-
-	new->context->esp += diff;
-	new->context->ebp += diff;
-
-	/*
-        ** Next, we must fix the EBP chain in the child.  This is necessary
-        ** in the situation where the fork() occurred in a nested function
-	** call sequence; we fixed EBP, but the "saved" EBP in the stack
-	** frame is pointing to the calling function's frame in the parent's
-	** stack, not the child's stack.
-	**
-	** We are guaranteed that the chain of frames ends at the user
-	** process' main routine, because exec() will initialize EBP for
-	** the process to 0, and the entry prologue code in the main
-	** routine will push EBP, ensuring a NULL pointer in the chain.
-        */
-
-	// start at the current frame
-
-	ptr = (Uint32 *) new->context->ebp;
-
-	// follow the chain of frame pointers to its end
-	while( *ptr != 0 ) {
-		// update the back link from this frame to the previous
-		*ptr = (Uint32) ((void *) *ptr + diff );
-		// follow the updated link
-		ptr = (Uint32 *) *ptr;
-	}
+	//c_printf( "Forked address %x %x \n", new->pid, (Uint32)new->pdt, pcb->pid , (Uint32)pcb->pdt );
 
 	// assign the PID return values for the two processes
 
 	ptr = (Uint32 *) (ARG(pcb)[1]);
 	*ptr = new->pid;
 
-	ptr = (Uint32 *) ( ((void *)(ARG(new)[1])) + diff );
+	//to get in the ccorrect address space switch to the new process page directories
+	_vmeml2_change_page( (Uint32) new->pdt );
+
+	//move from intermeditary to new stack
+	for( s= 0; s < stack_copy_reserve_size; s++ )
+	{
+		_kmemcpy( (void *)((Uint32)( new->stack) + (PAGE_SIZE * s)), (void *)stack_copy_reserve[s], PAGE_SIZE);
+	}
+
+	ptr = (Uint32 *) (ARG(new)[1]);
 	*ptr = 0;
+
+	//after change switch back
+	_vmeml2_change_page((Uint32) pcb->pdt );
 
 	/*
 	** Philosophical issue:  should the child run immediately, or
@@ -266,6 +233,64 @@ static void _sys_read( Pcb *pcb ) {
 	}
 
 
+}
+
+static void _sys_read_buf( Pcb *pcb ){
+	
+	// temp vars
+	Status status;
+	Key key;
+	char *buf;
+	int size;
+
+	// let the keyboard driver know we expect keystrokes for this process
+	buf = (char *) (ARG(pcb)[1]);
+	size = (int) (ARG(pcb)[2]);
+
+	if( buf_read( buf, size, _current ) ){
+
+		// move process to buffered-blocking queue
+		key.u = _current->pid;
+		status = _q_insert( _buf_block, (void *) _current, key );
+		if( status != SUCCESS ){
+			_kpanic( "sys_read_buf", "insert status %s\n", status );
+		}
+		_current->state = BLOCKED;
+
+		// Dispatch a new process for running
+		_dispatch();
+	}
+	else{
+		c_printf( "Unable to acquire a PS/2 IO Request.\n" );
+	}
+}
+
+static void _sys_read_char( Pcb *pcb ){
+	
+	// temp vars
+	Status status;
+	Key key;
+	char *buf;
+	//int size;
+
+	// let the keyboard driver know we expect keystrokes for this process
+	buf = (char *) (ARG(pcb)[1]);
+	if( char_read( buf, _current ) ){
+
+		// move process to buffered-blocking queue
+		key.u = _current->pid;
+		status = _q_insert( _buf_block, (void *) _current, key );
+		if( status != SUCCESS ){
+			_kpanic( "sys_read_buf", "insert status %s\n", status );
+		}
+		_current->state = BLOCKED;
+
+		// Dispatch a new process for running
+		_dispatch();
+	}
+	else{
+		c_printf( "Unable to acquire a PS/2 IO Request.\n" );
+	}
 }
 
 /*
@@ -422,7 +447,7 @@ static void _sys_get_pid( Pcb *pcb ) {
 
 	RET(pcb) = SUCCESS;
 	*((Uint32 *)(ARG(pcb)[1])) = pcb->pid;
-
+	
 }
 
 /*
@@ -596,6 +621,8 @@ void _syscall_init( void ) {
 	_syscall_tbl[ SYS_get_time ]      = _sys_get_time;
 	_syscall_tbl[ SYS_set_priority ]  = _sys_set_priority;
 	_syscall_tbl[ SYS_set_time ]      = _sys_set_time;
+	_syscall_tbl[ SYS_read_buf ]	  = _sys_read_buf;
+	_syscall_tbl[ SYS_read_char ]	  = _sys_read_char;
 
 //	these are syscalls we elected not to implement
 //	_syscall_tbl[ SYS_set_pid ]    = _sys_set_pid;
@@ -634,6 +661,9 @@ void _isr_syscall( int vector, int code ) {
 	if( _current->context == NULL ) {
 		_kpanic( "_isr_syscall", "null _current context", FAILURE );
 	}
+
+	
+//	c_printf("PatS: %x\n", _current->pdt );
 
 	// retrieve the syscall code from the process
 

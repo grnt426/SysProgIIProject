@@ -91,6 +91,9 @@ Status exit(void);
 
 Status read(int *buf);
 
+
+Status read_buf( char *buf, int size );
+
 /*
 ** write - write a single character to the SIO
 **
@@ -101,6 +104,8 @@ Status read(int *buf);
 */
 
 Status write(char buf);
+
+Status write_x(Uint32 val);
 
 /*
 ** msleep - put the current process to sleep for some length of time

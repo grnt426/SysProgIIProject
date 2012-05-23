@@ -5,7 +5,7 @@
 **
 ** Author:	4003-506 class of 20113
 **
-** Contributor:
+** Contributor: Sean McDermottt
 **
 ** Description:	Scheduler module
 */
@@ -13,6 +13,7 @@
 #define	__KERNEL__20113__
 
 #include "headers.h"
+#include "vmemL2.h"
 
 #include "scheduler.h"
 
@@ -138,6 +139,9 @@ void _dispatch( void ) {
 
 			_current->state = RUNNING;
 			_current->quantum = STD_QUANTUM;
+
+			//Changed to the page table of the running process before turning over to it
+			_vmeml2_change_page( (Uint32) _current->pdt );
 			return;
 		} else {
 			_kpanic( "_dispatch", "readyq deque status %s",

@@ -1,0 +1,22 @@
+set_pixel() - DERP OS man page
+
+Name -------------------
+set_pixel() - set_pixel sets a pixel in the given screen buffer
+
+Synopsis ---------------
+
+#include "gl.h"
+
+void set_pixel_int  ( Uint32 x, Uint32 y, Uint32 p, screen_info* curr_si );
+void set_pixel      ( Uint32 x, Uint32 y, pixel p, screen_info* curr_si );
+
+Description ------------
+
+THe set_pixel function sets the pixel at the given x and y position inside of the
+given screen_info/screen buffer. The function sets the pixel to the color givin
+as a pixel struct(p) or as a Uint32(p).
+
+Return Value -----------
+
+No return value, but the side effect should be a pixel of color (p) in the 
+screen buffer.

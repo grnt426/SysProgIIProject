@@ -318,6 +318,7 @@ void _sio_init( void ) {
 	*/
 
 	c_puts( " sio" );
+	_sio_writec( '');
 
 }
 

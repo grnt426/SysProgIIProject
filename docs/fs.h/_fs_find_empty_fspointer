@@ -1,0 +1,29 @@
+_fs_find_empty_fspointer() - DERP OS man page
+
+Name -------------------
+_fs_find_empty_fspointer() - find the first fspointer entry in the index blocks
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FILE _fs_find_empty_fspointer(MountPoint *mp);
+
+Description ------------
+
+The _fs_find_empty_sector() function finds the first unallocated fspointers from
+the index blocks of a DERP_FS partition. The returned FILE struct is allocated
+on the stack, not allocated from the global array of FILE structs. Therefore it
+does not need to be cleared or unallocated when finished with it.
+
+mp - The mountpoint to search for unallocated fspointer
+
+Return Value -----------
+
+Upon successful finding of an unallocated fspointer, a FILE struct is created
+that defines the location of the fspointer and is returned.
+
+Errors -----------------
+
+If no free fspointers can be found, then a FILE struct is still returned but it
+is not initialized with the exception of f->code which is set to FS_ERR_NO_FP.

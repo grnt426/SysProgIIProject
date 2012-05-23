@@ -1,0 +1,34 @@
+_fs_find_file() - DERP OS man page
+
+Name -------------------
+_fs_find_file() - Finds a file in the filesystem
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FILE _fs_find_file(MountPoint *mp, char filename[8]);
+
+Description ------------
+
+The _fs_find_file() function performs the creation of a file with name
+specified by filename that will reside on the mountpoint mp. This causes
+the allocation of the next free fspointer as well as the next free sector. The
+FILE struct that is constructed is placed on the stack.
+
+This also initializes the first sector of the file by creating a header of 'F'
+'I''L''E'. The sector is also blanked out with 0s to allow for free writing.
+
+mp - The mountpoint to search for the file
+
+filename - The name of the file to be found
+
+Return Value -----------
+
+Upon successful finding of the file a FILE struct is returned that represents
+the file. File->code should be set to FS_SUCCESS
+
+Errors -----------------
+
+If the file could not be found in the filesystem, FS_ERR_FILENOTFOUND is
+returned via file->code.

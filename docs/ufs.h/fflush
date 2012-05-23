@@ -1,0 +1,25 @@
+fflush() - DERP OS man page
+
+Name -------------------
+fflush() - flush a file pointer
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FS_STATUS fnamefile(FILE *file);
+
+Description ------------
+
+The fflush() function forces a write of the buffer of the file pointer
+specified by file to the mountpoint of the file. The internal state of the file
+(offset, size, etc) is unaltered.
+
+Return Value -----------
+
+Upon successful write of the buffer to the disk, FS_SUCCESS will be returned.
+
+Errors -----------------
+
+If there was an error writing to the disk, FS_ERR_DISKFAULT will be returned.
+If the file parameter is NULL, FS_ERR_BADFILE will be returned.

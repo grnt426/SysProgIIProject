@@ -1,0 +1,44 @@
+_fs_allocate_filepointer() - DERP OS man page
+
+Name -------------------
+_fs_unallocate_filepointer() - Deallocates a filepointer
+_fs_allocate_filepointer() - Allocates a filepointer
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FS_STATUS _fs_unallocate_filepointer(FILE *file);
+
+FS_STATUS _fs_allocate_filepointer(const FILE *source, FILE **dest);
+
+Description ------------
+
+The _fs_unallocate_filepointer() and _fs_allocate_filepointer() functions are
+used for allocating and deallocating file pointers from the global array of
+FILE structs.
+
+The _fs_unallocate_filepointer() function marks a filepointer in the global
+array of FILE structs as available by setting the code of the file to
+FS_AVAILABLE.
+
+file - the file to mark as available
+
+The _fs_allocate_filepointer() function marks a filepointer in the global array
+of FILE structs as allocated by copying the data from the source file struct to
+a pointer in the global array. The address of this FILE struct from the global
+array is returned via the dest argument.
+
+source - the FILE struct to store in the global array
+
+dest (out) - an address to store a pointer to the FILE struct on the global 
+array
+
+Return Value -----------
+
+Upon successful allocation or deallocation, FS_SUCCESS is returned.
+
+Errors -----------------
+
+If no free filepointers can be found in the global array of file pointers, 
+FS_ERR_NO_FP is returned.

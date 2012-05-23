@@ -1,0 +1,25 @@
+_fs_is_free_filepointer() - DERP OS man page
+
+Name -------------------
+_fs_is_free_filepointer() - Determines if there are any free filepointers
+
+Synopsis ---------------
+
+#include "fs.h"
+
+int _fs_is_free_filepointer(void);
+
+Description ------------
+
+The _fs_is_free_filepointer() function checks to see if there are any free file
+pointers use by iterating over the FILE structs of the global array and
+checking if the code of the file is set to FS_AVAILABLE.
+
+Return Value -----------
+
+If the file is in use, FS_ERR_FILE_INUSE is returned. If the file is not in use
+FS_AVAILABLE is returned.
+
+Errors -----------------
+
+[ None ]

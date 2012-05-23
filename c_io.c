@@ -15,6 +15,8 @@
 **
 */
 
+#include "gl_print.h"
+#include "printf.h"
 #include "c_io.h"
 #include "startup.h"
 #include "support.h"
@@ -35,6 +37,7 @@ unsigned int	scroll_max_x, scroll_max_y;
 unsigned int	curr_x, curr_y;
 unsigned int	min_x, min_y;
 unsigned int	max_x, max_y;
+static int		current_device;
 
 #ifdef	SA_DEBUG
 #include <stdio.h>
@@ -63,6 +66,10 @@ static unsigned int bound( unsigned int min, unsigned int value, unsigned int ma
 	return value;
 }
 
+void c_set_device( int device ) {
+	current_device = device;
+}
+
 static void __c_setcursor( void ){
 	unsigned addr;
 	unsigned int	y = curr_y;
@@ -89,6 +96,9 @@ static unsigned int __c_strlen( char const *str ){
 }
 
 static void __c_putchar_at( unsigned int x, unsigned int y, unsigned int c ){
+	if( current_device == 1 )
+		gl_putchar_at( x, y, c );
+
 	/*
 	** If x or y is too big or small, don't do any output.
 	*/
@@ -132,6 +142,7 @@ void c_moveto( unsigned int x, unsigned int y ){
 ** The putchar family
 */
 void c_putchar_at( unsigned int x, unsigned int y, unsigned int c ){
+
 	if( ( c & 0x7f ) == '\n' ){
 		unsigned int	limit;
 
@@ -205,6 +216,8 @@ void c_putchar( unsigned int c ){
 */
 void c_puts_at( unsigned int x, unsigned int y, char *str ){
 	unsigned int	ch;
+	if( current_device == 1)
+		gl_puts_at(x, y, str);
 
 	while( (ch = *str++) != '\0' && x <= max_x ){
 		c_putchar_at( x, y, ch );
@@ -214,6 +227,9 @@ void c_puts_at( unsigned int x, unsigned int y, char *str ){
 
 #ifndef SA_DEBUG
 void c_puts( char *str ){
+	if( current_device == 1)
+		gl_puts(str);
+
 	unsigned int	ch;
 
 	while( (ch = *str++) != '\0' ){
@@ -406,7 +422,7 @@ static void __c_do_printf( int x, int y, char **f ){
 	int	width;
 	int	len;
 	int	padchar;
-
+	
 	/*
 	** Get characters from the format string and process them
 	*/
@@ -501,10 +517,14 @@ static void __c_do_printf( int x, int y, char **f ){
 }
 
 void c_printf_at( unsigned int x, unsigned int y, char *fmt, ... ){
+	if( current_device == 1)
+			printf(fmt, (int *)( fmt + 1 ));
 	__c_do_printf( x, y, &fmt );
 }
 
 void c_printf( char *fmt, ... ){
+	if( current_device == 1)
+		printf(fmt, (int *)( fmt + 1 ));
 	__c_do_printf( -1, -1, &fmt );
 }
 

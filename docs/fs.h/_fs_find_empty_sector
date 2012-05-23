@@ -1,0 +1,28 @@
+_fs_find_empty_sector() - DERP OS man page
+
+Name -------------------
+_fs_find_empty_sector() - find the first unallocated sector of the MountPoint
+
+Synopsis ---------------
+
+#include "fs.h"
+
+Uint32 _fs_find_empty_sector(MountPoint *mp);
+
+Description ------------
+
+The _fs_find_empty_sector() function finds the first unallocated sector in the
+mountpoint specified by mp. This performs a bitwise search of the bitmaps
+stored in the first sector of an index block of the DERP_FS partition.
+
+mp - The mountpoint to search for unallocated sector
+
+Return Value -----------
+
+If an unallocated sector is found, the index of it, relative to the start of
+the filesystem is returned.
+
+Errors -----------------
+
+If no free sectors can be found, 0x0 will be returned, since sector 0 can never
+be allocated.

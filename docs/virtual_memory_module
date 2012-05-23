@@ -1,0 +1,29 @@
+Virtual Memory Overview
+Sean McDermott
+
+In virtual memory there three separate parts. The parts are vmem. vmemL2, and vmem_isr.
+
+Vmem is intended to be low level management of pages. In this part you will find functions to find free 4KB pages 4MB, and free reserve pages that map into everyone's page directories. Vmem is also in charge of mapping the first page directory table as an identity mapped. The first 4MB needs to mapped into memory for bios calls and kernel access. The next 4MB are used the addresses for the bitmap, in which bits are used to find free pages in memory.
+
+VmemL2 job is to take control of vmem functions to make page directory table, page tables, and pages. Also vmemL2 also has the responsibility of freeing page table directory that are no longer need.
+
+Vmem_isr was originally intended to be built on for features like copy-on-write and dynamically allocating more space. Unfortunately these features were cut based on time and to cut down on potential problem when merging code with group members. Vmem_isr is used more like a memory error catcher with any address that Page Faults or General Protection Faults not in an isr are caught,
+
+Although not currently used in this project there is a module called vmem_ref which can do counting on physical addresses. This was intended to facilitate copy-on-write. It would be increased whenever a page was being shared and decrease when a program tried to write to it and it's page was replaced or granted write permission.
+
+Also there are assembly function in all three parts of the virtual memory modules. All of the implementation of these are stored in vmemA.S. This was done so that assembly code would be in one place and not inlined in the virtual memory code.
+
+Major Data Structures Used:
+Page Table Directory - (must be excately know format) (Please see http://wiki.osdev.org/Paging )
+Page Table - (must be excately know format) (Please see http://wiki.osdev.org/Paging )
+Bitmap - bits marked as 1 to signified the corresponding 4kb address was in use, and 0 to say it was being used.
+Reference Counting array - This structure was based off of flags see in the Page Table Directory. This was also done to keep the directory small. Each entry is only one word (32 bits).
+
+Problems Encountered in Virtual Memory                                                                                                                                                                  
+Endless no feedback triple faults. These required time to figure where and how to stop before it faulted.
+Merging with group members who were used to accessing memory in a flat model.
+Being careful not to cause a page fault by trying to populate page directories and page tables whose address are out of map range.
+Running out of time to implement feature like malloc, copy-on-write, and invalidating memory address zero.
+
+
+

@@ -1,0 +1,38 @@
+_fs_toggle_sector() - DERP OS man page
+
+Name -------------------
+_fs_toggle_Sector() - Toggles the status of a sector
+_fs_allocate_sector() - Allocates a sector
+_fs_unallocate_sector() - Unallocates a sector
+
+Synopsis ---------------
+
+#include "fs.h"
+
+void _fs_allocate_sector(MountPoint *mp, Uint32 sector);
+
+void _fs_unallocate_sector(MountPoint *mp, Uint32 sector);
+
+void _fs_toggle_sector(MountPoint *mp, Uint32 sector);
+
+Description ------------
+
+The _fs_allocate_sector() and _fs_unallocate_sector() functions  chain into
+_fs_toggle_sector() function.
+
+The _fs_toggle_sector() toggles the bit indicating the allocation status of
+the sector of a sector, specified by sector, in a MountPoint mp. This involves
+some non-sensical modular math to determine which bit to mask out of the
+nearest bitmap for the sector.
+
+mp - the mountpoint to allocate the sector within
+
+sector - the sector of the filesystem to allocate.
+
+Return Value -----------
+
+[ None ]
+
+Errors -----------------
+
+[ None ]

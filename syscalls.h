@@ -24,20 +24,22 @@
 
 // system call codes
 
-#define	SYS_fork		0
-#define	SYS_exec		1
-#define	SYS_exit		2
-#define	SYS_msleep		3
-#define	SYS_read		4
-#define	SYS_write		5
-#define	SYS_kill		6
+#define	SYS_fork			0
+#define	SYS_exec			1
+#define	SYS_exit			2
+#define	SYS_msleep			3
+#define	SYS_read			4
+#define	SYS_write			5
+#define	SYS_kill			6
 #define	SYS_get_priority	7
-#define	SYS_get_pid		8
+#define	SYS_get_pid			8
 #define	SYS_get_ppid		9
 #define	SYS_get_state		10
 #define	SYS_get_time		11
 #define	SYS_set_priority	12
 #define	SYS_set_time		13
+#define SYS_read_buf		14
+#define SYS_read_char		15
 
 // these are syscalls we elected not to implement
 // #define	SYS_set_pid		?
@@ -46,7 +48,7 @@
 
 // number of "real" system calls
 
-#define	N_SYSCALLS	14
+#define	N_SYSCALLS	16
 
 // dummy system call code to test the syscall ISR
 
@@ -98,6 +100,7 @@ void _isr_syscall( int vector, int code );
 
 void _syscall_init( void );
 
+void _isr_usb_pull( int vector, int code );
 #endif
 
 #endif

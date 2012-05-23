@@ -1,0 +1,32 @@
+_fs_probe() - DERP OS man page
+
+Name -------------------
+_fs_probe() - Initialize global ATA devices
+
+Synopsis ---------------
+
+#include "fs.h"
+
+void _fs_probe(ATADevice *dev);
+
+Description ------------
+
+The _fs_probe() function probes the ATADevice specified by dev for the
+existance of any DERP_FS partitions. The boundries of partitions are determined
+by reading the start sector and size in sectors of the partition specified in
+the MBR. These formats follow the standard MBR format. Every partition that
+is found is checked to see if it is DERP_FS by reading the first partition of
+the partition and checking to see if the first 4 bytes are 'D''E''R''P'. If
+they do not match, then the partition is not DERP_FS.
+
+Each partition that is found that is DERP_FS is stored in the global
+mount_points array as a MountPoint struct. The count of mount_point_count
+is incremented. 
+
+Return Value -----------
+
+[ None ]
+
+Errors -----------------
+
+Nothing can error out this function.

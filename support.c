@@ -17,6 +17,10 @@
 #include "c_io.h"
 #include "x86arch.h"
 #include "bootstrap.h"
+#include "sio.h"
+#include "string.h"
+#include "gl.h"
+#include "gl_print.h"
 
 /*
 ** Global variables and local data types.
@@ -206,11 +210,19 @@ static void init_idt( void ){
 */
 void __panic( char *reason ){
 	asm( "cli" );
+	screen_info* si = get_screen_info( 0x02 );
+	gl_puts_s( "\nPANIC: ", si );
+	gl_puts_s( reason, si );
+	gl_puts_s("\nHalting...", si );
+	
+	draw_active_screens_once();
+
 	c_printf( "\nPANIC: %s\nHalting...", reason );
 	for(;;){
 		;
 	}
 }
+
 
 /*
 ** Name:	__init_interrupts

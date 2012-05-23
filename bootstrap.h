@@ -13,12 +13,18 @@
 #ifndef	_BOOTSTRAP_H
 #define	_BOOTSTRAP_H
 
+//#define VIDEO_TEXT
+
 /*
 ** The target program itself
 */
 #define TARGET_SEGMENT	0x00001000	/* 0001:0000 */
 #define TARGET_ADDRESS	0x00010000	/* and upward */
 #define	TARGET_STACK	0x00010000	/* and downward */
+
+/*
+** Random memory addresses
+*/
 
 /*
 ** The Global Descriptor Table (0000:0500 - 0000:2500)

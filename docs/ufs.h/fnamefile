@@ -1,0 +1,41 @@
+fnamefile() - DERP OS man page
+
+Name -------------------
+fnamefile() - creates a file of mountpoint files and file sizes
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FILE *fnamefile(const char mountpoint);
+
+Description ------------
+
+The fnamefile() function generates a file that contains a list of files 
+contained in the MountPoint specified in mountpoint along with their sizes in
+bytes. This file is stored on the specified MountPoint and a pointer to this 
+file is then returned.
+
+This function can be used to generated files for performing tasks such as
+displaying the contents of the filesystem.
+
+Return Value -----------
+
+Upon successful completion, fnamefile() returns a FILE pointer to the generated
+namefile. If no filepointers could be allocated or the disk is full, then NULL
+is returned. 
+
+The namefile is formatted in such a way that each file is given 12 bytes of
+space. The first 8 bytes are the name of the file. The following 4 bytes are
+used for the little-endian 32-bit number of bytes in the size of the file.
+
+The internal pointer for the file will be set to the 0th byte of the file
+
+Errors -----------------
+
+The following conditions will cause NULL to be returned:
++ The mountpoint specified is invalid OR
++ The mountpoint specified is not currently mounted
++ The mountpoint is full and a namefile could not be created
++ All global file filepointers are allocated
+

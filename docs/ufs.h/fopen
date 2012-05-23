@@ -1,0 +1,43 @@
+fopen() - DERP OS man page
+
+Name -------------------
+fopen() - file pointer open functions
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FILE *fopen(const char filepath[10]);
+
+Description ------------
+
+The fopen() function opens the file whose path is pointed to be filepath and
+allocates a filepointer for reading/writing from the file. If the file does not
+exist, it will be created, if possible.
+
+Since the function allocates one of the global filepointers, this call can fail
+if there are no free file pointers. This stipulation makes it important that
+the filepointer returned must be closed when finished with the file.
+
+The filepath parameter must be set to a ten character array that is formatted
+such that X:YYYYYYYY where X is the mount point and Y is a character in the
+name of the file to open. If the filename is less than 8 characters, the
+filename must be padded with \0.
+
+Return Value -----------
+
+Upon successful completion, fopen() returns a FILE pointer. If the file already
+exists, the FILE->code will be set to FS_SUCCESS. If the file was created, the
+FILE->code will be set to FS_SUCCESS_NEWFILE. Upon failure, NULL will be
+returned.
+
+The returned FILE will be initialized to point at the 0th byte of the file. A
+buffer of the first sector of the file will be stored.
+
+Errors -----------------
+
+The following conditions will cause NULL to be returned:
++ The path to the file was invalid.
++ There were no available filepointers.
++ The file exists, but is already in use.
+

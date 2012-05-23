@@ -1,0 +1,30 @@
+_fs_file_inuse() - DERP OS man page
+
+Name -------------------
+_fs_file_inuse() - Determines if the file is in use
+
+Synopsis ---------------
+
+#include "fs.h"
+
+FS_STATUS _fs_file_inuse(FILE *file);
+
+Description ------------
+
+The _fs_file_inuse() function checks to see if a file is in use by iterating
+over the FILE structs of the global array and checking if the filename and the
+mountpoints are the same.
+
+Originally this would also check the index blocks to see if the files are
+in use, but this is not part of the current DERP_FS implementation.
+
+file - The file to determine if the 
+
+Return Value -----------
+
+If the file is in use, FS_ERR_FILE_INUSE is returned. If the file is not in use
+FS_AVAILABLE is returned.
+
+Errors -----------------
+
+[ None ]

@@ -21,7 +21,7 @@
 
 // size of a user stack (in longwords)
 
-#define	STACK_SIZE	1024
+#define	STACK_SIZE	4096
 
 // number of stacks
 
@@ -51,34 +51,6 @@ extern Uint32 *_system_esp;	// OS stack pointer
 /*
 ** Prototypes
 */
-
-/*
-** _stack_alloc()
-**
-** allocate a Stack structure
-**
-** returns a pointer to the Stack, or NULL on failure
-*/
-
-Stack *_stack_alloc( void );
-
-/*
-** _stack_free(stack)
-**
-** deallocate a stack, putting it into the list of available stacks
-**
-** returns the status from inserting the Stack into the free queue
-*/
-
-Status _stack_dealloc( Stack *stack );
-
-/*
-** _stack_init()
-**
-** initializes all process-related data structures
-*/
-
-void _stack_init( void );
 
 #endif
 

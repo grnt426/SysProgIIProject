@@ -86,6 +86,7 @@ void prt_status( char *msg, Status stat ) {
 
 Status spawnp( Pid *pid, Prio prio, void (*entry)(void) ) {
 	Pid new;
+	Pid pid_to_pass;
 	Status status, status2;
 
 	// create the process
@@ -108,6 +109,15 @@ Status spawnp( Pid *pid, Prio prio, void (*entry)(void) ) {
 			prt_status( ", set_priority() status %s\n", status );
 			exit();
 		}
+		//request a screen
+		status2 = get_pid( &pid_to_pass );
+		status = get_screen_buffer( pid_to_pass );
+		if( status != SUCCESS ) {
+			//c_printf( "Child pid %d", pid_to_pass );
+			//prt_status( ", get_screen_buffer() status %s\n", status );
+			exit();
+		}
+		
 		status = exec( entry );
 		// if we got here, the exec() failed
 		status2 = get_pid( &new );
@@ -137,4 +147,75 @@ Status spawn( Pid *pid, void (*entry)(void) ) {
 
 	return( spawnp(pid,PRIO_STD,entry) );
 
+}
+
+/*
+* Writes a hex value to the terminal
+*
+* @param val hex value to print
+*/
+Status write_x(Uint32 val) {
+	
+	Uint32 t = val;
+	int p;
+	write( '0' );
+	write( 'x' );
+	for(p = 0; p <=32; p+=4) { 
+		t = val << p;
+		t = t >> 28;
+		switch(t) {
+			case 0:
+				write( '0' );
+				break;
+			case 1:
+				write( '1' );
+				break;
+			case 2:
+				write( '2' );
+				break;
+			case 3:
+				write( '3' );
+				break;
+			case 4:
+				write( '4' );
+				break;
+			case 5:
+				write( '5' );
+				break;
+			case 6:
+				write( '6' );
+				break;
+			case 7:
+				write( '7' );
+				break;
+			case 8:
+				write( '8' );
+				break;
+			case 9:
+				write( '9' );
+				break;
+			case 10:
+				write( 'a' );
+				break;
+			case 11:
+				write( 'b' );
+				break;
+			case 12:
+				write( 'c' );
+				break;
+			case 13:
+				write( 'd' );
+				break;
+			case 14:
+				write( 'e' );
+				break;
+			case 15:
+				write( 'f' );
+				break;
+			default:
+			break;
+		}
+	}
+
+	return SUCCESS;
 }

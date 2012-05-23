@@ -14,6 +14,8 @@
 #ifndef _STARTUP_H_
 #define _STARTUP_H_
 
+#include "headers.h"
+
 /*
 ** Name:	__inb, __inw, __inl
 **
@@ -50,5 +52,12 @@ int __get_flags( void );
 ** Description:	Pause until something happens
 */
 void __pause( void );
+
+/*
+** Name:	__get_end
+**
+** Description:	Gets the last byte that the kernel exists in
+*/
+Uint32 __get_end( void );
 
 #endif

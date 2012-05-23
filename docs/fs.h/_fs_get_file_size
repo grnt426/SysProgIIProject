@@ -1,0 +1,30 @@
+_fs_get_file_size() - DERP OS man page
+
+Name -------------------
+_fs_get_file_size() - Finds the size of a file
+
+Synopsis ---------------
+
+#include "fs.h"
+
+Uint32 _fs_get_file_size(FILE *file);
+
+Description ------------
+
+The _fs_get_file_size() function traverses the sectors of a file as specified
+by file to determine the size of the file. If the sector that is currently
+buffered by the file is traversed, the size of the bytes currently in the
+buffer is added to the size of the file instead of the size of the sector on
+the disk.
+
+file - The file to find the size of
+
+Return Value -----------
+
+Upon successful traversal of the file, the size of the file in bytes is
+returned.
+
+Errors -----------------
+
+If the filesystem is malformed and an indexblock fails to actually be an
+indexblock, then the system will panic.

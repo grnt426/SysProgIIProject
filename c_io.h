@@ -238,4 +238,12 @@ int c_gets( char *buffer, unsigned int size );
 */
 int c_input_queue( void );
 
+/*
+** Name:	c_set_device
+**
+** Description:	Set the device to print to, allows for stdout if gl is off.
+** Arguments:	device to use ( 0==stdio, 1==gl )
+*/
+void c_set_device( int device );
+
 #endif

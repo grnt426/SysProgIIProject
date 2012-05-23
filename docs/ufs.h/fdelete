@@ -1,0 +1,29 @@
+fdelete() - DERP OS man page
+
+Name -------------------
+fdelete() - delete a file and unallocate it
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FS_STATUS fdelete(FILE *file);
+
+Description ------------
+
+The fdelete() function closes and unallocates the filepointer specified by
+file, and then deletes the file from the filesystem. The closing and
+deallocation of the filepointer is the same as if fclose() on the file had been
+called. The removal of the file from the filesystem causes a removal of the
+file from the filesystem's nametables and index blocks and marks each sector
+of the file as available.
+
+Return Value -----------
+
+Upon successfule closure and removal of the file from the filesystem, 
+FS_SUCCESS will be returned.
+
+Errors -----------------
+
+If the file was NULL or file->code was FS_AVAILABLE, FS_ERR_BADFILE will be
+returned and the changes to the filesystem will not be performed.

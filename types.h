@@ -27,6 +27,9 @@ typedef unsigned int	Uint;
 
 // size-specific integer types
 
+typedef long long	Int64;
+typedef unsigned long long	Uint64;
+
 typedef long		Int32;
 typedef unsigned long	Uint32;
 
@@ -63,6 +66,10 @@ typedef	Uint16		Pid;
 // Time (kept in clock ticks)
 
 typedef	Uint32		Time;
+
+#define TRUE    1
+#define FALSE   0
+
 
 #endif
 

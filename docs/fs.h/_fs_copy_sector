@@ -1,0 +1,24 @@
+_fs_copy_sector() - DERP OS man page
+
+Name -------------------
+_fs_copy_sector() - Copies a sector
+
+Synopsis ---------------
+
+#include "fs.h"
+
+void _fs_copy_sector(const ATASector *source, ATASector *dest);
+
+Description ------------
+
+The _fs_copy_sector() function copies a ATASector from the sector
+specified in source to the ATASector specified by dest. This is done byte
+by byte.
+
+Return Value -----------
+
+[ None ]
+
+Errors -----------------
+
+[ None ]

@@ -1,0 +1,33 @@
+FUNCTION() - DERP OS man page
+
+Name -------------------
+FUNCTION() - <BRIEF DESCRIPTION OF THE FUNCTION
+
+Synopsis ---------------
+
+#include "ufs.h"
+
+FS_STATUS fclose(FILE *file);
+
+Description ------------
+
+<EXAMPLE>
+The fclose() function closes and unallocates the filepointer specified by file.
+Before unallocating the filepointer, the buffer is flushed to the disk, as if
+fflush(file) had been called. Then the file pointer is unallocated by setting
+file->code to FS_AVAILABLE.
+<EXAMPLE>
+
+Return Value -----------
+
+<EXAMPLE>
+Upon successful closure of the filepointer, FS_SUCCESS will be returned.
+<EXAMPLE>
+
+Errors -----------------
+
+<EXAMPLE>
+If there was an error writing to the disk, FS_ERR_DISKFAULT will be returned.
+If the file parameter is NULL or file->code is FS_AVAILABLE, FS_ERR_BADFILE
+will be returned.
+<EXAMPLE>
