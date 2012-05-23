@@ -1,0 +1,20 @@
+draw_rect() - DERP OS man page
+
+Name -------------------
+draw_rect() - draws a rectangle to the user programs buffer.
+
+Synopsis ---------------
+
+#include "gl.h"
+
+void draw_rect( Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, pixel p );
+
+Description ------------
+
+The draw_rect function draws a rectagle by calling get_pid to obtain the current
+user program. It then draws a rectangle with color pixel(p) from ( x1, y1 ) to ( x2, y2 ).
+
+Return Value -----------
+
+No return value, side effects are a rect in the screen buffer.
+

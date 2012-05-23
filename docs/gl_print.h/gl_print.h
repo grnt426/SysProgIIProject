@@ -15,11 +15,4 @@ void gl_puts( char *str );
 
 void gl_puts_at(  unsigned int x, unsigned int y, char *str );
 
-char * gl_cvtdec0( char *buf, int value );
-int gl_cvtdec( char *buf, int value );
-
-int gl_cvthex( char *buf, int value );
-
-int gl_cvtoct( char *buf, int value );
-
 #endif //_WIN_MAN_H_

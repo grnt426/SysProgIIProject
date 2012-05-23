@@ -1,0 +1,21 @@
+pixel - DERP OS man page
+
+Name -------------------
+pixel - struct to hold color data
+
+Synopsis ---------------
+
+#include "gl.h"
+
+typedef struct pixel {
+	Uint8 b;
+	Uint8 g;
+	Uint8 r;
+	Uint8 a;
+}  __attribute__ ((packed)) pixel ;
+
+Description ------------
+
+The pixel struct is 32 bits (4 bytes) in size and contains a Uint8 field for red(r), 
+green(g), and blue(b) [ (a) is a reserved bit field].
+

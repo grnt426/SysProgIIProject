@@ -1,0 +1,23 @@
+draw_character() - DERP OS man page
+
+Name -------------------
+draw_character() - draws a given character to the screen buffer
+
+Synopsis ---------------
+
+#include "gl.h"
+
+void draw_character( char c, Uint32 x, Uint32 y, pixel p );
+void do_draw_character( char c, Uint32 x, Uint32 y, pixel p, screen_info* curr_si);
+
+Description ------------
+
+THe draw character function when called from a user space uses get_pid to 
+grab the pid of the calling process and draws to the buffer assigned to that 
+Pid. It places the character at the x and y location and with the color specified
+in the pixel(p).
+
+Return Value -----------
+
+No return value, side effects are a character in the screen buffer.
+

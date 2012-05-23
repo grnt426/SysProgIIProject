@@ -1,0 +1,23 @@
+FUNCTION() - DERP OS man page
+
+Name -------------------
+FUNCTION() - <BRIEF DESCRIPTION OF THE FUNCTION
+
+Synopsis ---------------
+
+#include "gl.h"
+
+void draw_line( Uint32 x, Uint32 y, Uint32 x2, Uint32 y2, pixel p );
+
+Description ------------
+
+The draw_line function draws a horizontal or verticle line from ( x, y ) to ( x2, y2 )
+with the color of the pixel(p).
+
+Return Value -----------
+
+No return value, side effects are a line in the screen buffer.
+
+Errors -----------------
+
+I beleive that this function is from a very old version and may no longer work.

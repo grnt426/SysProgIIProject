@@ -1,0 +1,6 @@
+Video Experience
+
+The intial step for setting up any sort of video was looking at vga and bios mode setting. I the looked at VESA mode setting and decided that VBE, the vesa spec, had everything that I would need. 
+
+Steps:
+1) I 

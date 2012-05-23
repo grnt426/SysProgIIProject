@@ -1,0 +1,23 @@
+gl_putchar() - DERP OS man page
+
+Name -------------------
+gl_putchar() - puts a character on the scren buffer at the cursor location
+
+Synopsis ---------------
+
+#include "gl_printf.h"
+
+void gl_putchar( char c );
+
+void gl_putchar_at( unsigned int x, unsigned int y, char c );
+
+Description ------------
+
+The gl_putchar function draws a character at the current cursor loccation of 
+the user screen buffer. It uses gl.h/draw_character ultimately to draw to 
+the screen. The (at) version of this function draws to the provided location
+( x, y ).
+
+Return Value -----------
+
+No return value, side effects are a character drawn in the screen buffer.

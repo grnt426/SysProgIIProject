@@ -1,0 +1,27 @@
+gl_printf() - DERP OS man page
+
+Name -------------------
+gl_printf() - puts a string on the scren buffer at the cursor location
+
+Synopsis ---------------
+
+#include "gl_printf.h"
+
+int gl_printf(const char *format, ...);
+
+Description ------------
+
+The gl_printf function draws a string at the current cursor loccation of 
+the user screen buffer. It uses gl.h/draw_character ultimately to draw to 
+the screen.
+
+	This functoion supports the following formats:
+		%d - decimal integer
+		%x - hexdecimal
+		%X - Unsigned hexadecimal integer (capital letters)
+		%u - Unsigned decimal integer
+		%s - string
+
+Return Value -----------
+
+No return value, side effects are a string drawn in the screen buffer.

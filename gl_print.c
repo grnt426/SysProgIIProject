@@ -7,15 +7,10 @@ static screen_info* scrn_info_arr;
 static void gl_scroll( unsigned int l, screen_info* curr_si );
 static void _gl_do_putchar( char c, screen_info* curr_si );
 static void _gl_do_putchar_at( unsigned int x, unsigned int y, char c, screen_info* curr_si );
-static void _gl_do_printf( int x, int y, char **f );
-static int gl_pad( int x, int y, int extra, int padchar );
-static int gl_padstr( int x, int y, char *str, int len, int width, int leftadjust, int padchar );
-
 
 void gl_print_init( screen_info* ptr ) {
 	scrn_info_arr = ptr;
 }
-
 
 static void gl_scroll( unsigned int l, screen_info* curr_si ) {
 	char* to = curr_si->lines[0];

@@ -1,0 +1,52 @@
+read_buf() - DERP OS man page
+
+Name -------------------
+read_buf() - Performs a blocking buffered IO request for a user.
+
+Synopsis ---------------
+
+#include "headers.h"
+
+void read_buf( char *buffer, int size );
+
+Description ------------
+
+When a request is made for user input, the user is placed into a blocking queue
+and a new process is scheduled. The buffer will only be updated if the user
+program's window has focus in the window manager.
+
+Non-ASCII characters are ignored, such as tab, backspace, escape key, etc.
+The new-line will terminate reading more characters even if size characters
+were not read.  The new-line will not be stored in the buffer, and instead
+a nul-byte is written.  
+
+Hitting any of the function keys will not go to the user program, and will be
+preempted for switching processes.  The windows-key and arrow-keys are
+similarly never seen as they are reserved system keys.
+
+Always ensure that you request fewer characters than your buffer size (at a
+minimum of one less character) so as to leave space for the automatic
+nul-termination at the end of the string.
+
+buf		-	The array of characters to store the input.
+
+size	-	The number of characters to read as a maximum, excluding the 
+			nul-byte which is always added.
+
+Return Value -----------
+
+Nothing.
+
+Errors -----------------
+
+Providing a bad buffer or requesting too many characters has undefined
+behavior.
+
+Known Issues -----------
+
+Providing a size of 0 characters will instead be treated as a call to 
+read_char( char *buf). 
+
+If the maximum number of IO-requests is already being made when called, this
+function will return immediately, the buffer will be unmodified, and the user
+process rescheduled.

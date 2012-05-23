@@ -1,0 +1,50 @@
+read_char() - DERP OS man page
+
+Name -------------------
+read_char() - Performs a blocking buffered IO request for a user.
+
+Synopsis ---------------
+
+#include "headers.h"
+
+void read_char( char *buffer );
+
+Description ------------
+
+Provides a mean for doing "raw" input from the PS/2 keyboard.  A single
+character is read each time along with a status byte of which modifier keys
+(control, shift, and alt) are pressed. The status byte has the following
+format, with the following bits set to 1 if the condition is true:
+	Bit 1	-	Control key is pressed down
+	Bit 2	-	Alt key is pressed down
+	Bit 3	-	Shift key is pressed down
+	Bit 4-7	-	Reserved
+* Note: The reserved bits have no guaranteed value, it is highly recommend to
+and off those bits when comparing the whole byte and not individual flags.
+
+The buffer format is as follows: the first byte is the status byte, and the
+second byte is the character that was read from the keyboard.  
+
+The character that is returned is capitalized if shift was held down when the
+character was typed.
+
+Non-ASCII characters, such as escape, control, insert, etc will NOT cause
+read_char to return.  The character the user types must be an ASCII character.
+
+The modifier keys - control, shift, and alt - are set to 1 when either the 
+left or the right modifier key is pressed.
+
+buf		-	The array of characters to store the input.
+
+Return Value -----------
+
+Nothing.
+
+Errors -----------------
+
+Providing a bad buffer has undefined behavior.
+
+If the maximum number of IO-requests is already being made when called, this
+function will return immediately, the buffer will be unmodified, and the user
+process rescheduled.
+

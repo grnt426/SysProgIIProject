@@ -1,0 +1,21 @@
+draw_string() - DERP OS man page
+
+Name -------------------
+draw_string() - draws a string to the user programs buffer.
+
+Synopsis ---------------
+
+#include "gl.h"
+
+void draw_string( char* str, Uint32 x, Uint32 y, pixel p );
+
+Description ------------
+
+The draw_string function draws a string by calling get_pid to obtain the current
+user program. It then draws the string by calling draw_character for every 
+character in the string, it draws with color pixel(p) at ( x, y ).
+
+Return Value -----------
+
+No return value, side effects are a string drawn in the screen buffer.
+

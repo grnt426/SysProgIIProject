@@ -1,0 +1,19 @@
+printf() - DERP OS man page
+
+Name -------------------
+printf()
+
+Synopsis ---------------
+
+NOTE: Use gl_print.h/gl_printf
+
+This function is a library found online. It serves as a backend to my gl_printf.
+
+Description ------------
+
+This function relies on one function call to integrate with any system, in this case
+it uses gl_putchar to do its printing.
+
+Return Value -----------
+
+No return value, side effects are a string drawn in the screen buffer.

@@ -1,0 +1,25 @@
+EXIT() - DERP OS man page
+
+Name -------------------
+EXIT() - this function frees resources
+
+Synopsis ---------------
+
+#include "headers.h"
+
+void exit( Pcb *pcb );
+
+Description ------------
+
+This function does the proper procedure to frees up system resources. These 
+include but not limited to Pcb structures and allocated pages. After the 
+cleanup process is completed the function will ask to scheduler to run another
+process.
+
+Return Value -----------
+
+There is no return because this function will never return to the process.
+
+Errors -----------------
+
+If a failure happens it will be either ignore it will cause a kernel panic.

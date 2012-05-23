@@ -1,0 +1,23 @@
+gl_puts() - DERP OS man page
+
+Name -------------------
+gl_puts() - puts a string on the scren buffer at the cursor location
+
+Synopsis ---------------
+
+#include "gl_printf.h"
+
+void gl_puts( char *str );
+
+void gl_puts_at(  unsigned int x, unsigned int y, char *str );
+
+Description ------------
+
+The gl_puts function draws a string at the current cursor loccation of 
+the user screen buffer. It uses gl.h/draw_character ultimately to draw to 
+the screen. The (at) version of this function draws to the provided location
+( x, y ).
+
+Return Value -----------
+
+No return value, side effects are a string drawn in the screen buffer.

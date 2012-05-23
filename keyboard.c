@@ -119,110 +119,6 @@ void _ps2_keyboard_init( void ){
 
 	// install our ISR
 	__install_isr( PS2_K_VEC, _ps2_keyboard_isr );
-
-
-
-
-	// Try turning on the caps-lock light
-	/*
-	_ps2_keyboard_clear();
-	__outb( PS2_PORT, PS2_K_LED );
-	c_puts( "Waiting for argument buffer to be clear...\n" );
-	while( (__inb( PS2_PORT ) & 1) == 1 )
-		;
-	__outb( PS2_STAT, PS2_K_CAPS | PS2_K_NUML | PS2_K_SCRL );
-	*/
-
-
-	// Disable the Keyboard Interface
-#ifdef DEBUG_G
-	//c_puts( "Disabling Keyboard Interface...\n" );
-#endif
-	//_ps2_keyboard_clear();
-	//__outb( PS2_STAT, 0xF5 );
-	//_ps2_keyboard_clear();
-	//__outb( PS2_STAT, 0xA7 );
-
-	// clear the output buffer
-#ifdef DEBUG_G
-	//c_puts( "Clearing Input Buffer...\n" );
-#endif
-	//__inb( PS2_PORT );
-
-	
-	//_ps2_keyboard_clear();
-	//__outb( PS2_STAT, 0xAE );
-	
-
-	// Enable Interrupts
-	
-#ifdef DEBUG_G
-	//c_puts( "Enabling Keyboard Interrupts...\n" );
-#endif
-	/*
-	_ps2_keyboard_clear();
-	__outb( PS2_STAT, 0x20 );
-	_ps2_keyboard_ready();
-	while( (__inb( PS2_STAT ) & 1) == 1)
-		;
-	Uint resp = ( __inb(0x60) | 1 );
-	c_printf( "Val Read: 0x%x\n", resp );
-	_ps2_keyboard_clear();
-	__outb( PS2_STAT, 0x60 );
-//	_ps2_keyboard_clear();
-	_ps2_keyboard_ready();
-	__outb( 0x60, resp );
-	*/
-
-	/*
-	// Set delay
-	_ps2_keyboard_clear();
-	__outb( PS2_STAT, PS2_K_TYPD );
-	c_printf("RCVD: 0x%x\n", _ps2_keyboard_read()); // Acknowledge
-	_ps2_keyboard_ready();
-	__outb( PS2_PORT, 20 );
-	c_printf("RCVD: 0x%x\n", _ps2_keyboard_read()); // Acknowledge
-	*/
-	
-#ifdef DEBUG_G
-	//c_puts( "Setting Defaults...\n" );
-#endif
-	
-	//_ps2_keyboard_clear();
-	//_ps2_keyboard_write( 0xF6 );
-	//_ps2_keyboard_read();  //Acknowledge
-	
-	// Set Typematic Delay
-	/*
-	_ps2_keyboard_clear();
-	__outb( PS2_STAT, PS2_K_TYPD );
-	c_printf("RCVD: 0x%x\n", _ps2_keyboard_read()); // Acknowledge
-	_ps2_keyboard_ready();
-	__outb( PS2_PORT, 20 );
-	c_printf("RCVD: 0x%x\n", _ps2_keyboard_read()); // Acknowledge
-	*/
-	
-	// Enable
-	//_ps2_keyboard_clear();
-	//while( 1 )
-		//;
-	//__outb( PS2_STAT, 0xF4 );
-	//c_printf("RCVD: 0x%x\n", _ps2_keyboard_read()); // Acknowledge
-	
-
-
-	// reset the keyboard
-	/*	
-	_ps2_keyboard_clear();
-	__outb( PS2_STAT, 0xFF );
-	_ps2_keyboard_ready();
-	c_printf("RCVD: 0x%x\n", __inb( PS2_PORT ));
-	*/
-
-
-
-		
-	
 }
 
 
@@ -529,7 +425,11 @@ int buf_read( char* buf, int size, Pcb* cur ){
 	// Create an IO-Request block
 	int index = _ps2_get_io_req();
 	if( index == -1 ){
-		c_printf( "keyboard: IO-request pool full.\n" );
+		Key key;
+		key.u = cur->pid;
+		void *data;
+		_q_remove_by_key( _buf_block, &data, key );
+		_sched( cur );
 		return 0;
 	}
 
@@ -553,41 +453,4 @@ int buf_read( char* buf, int size, Pcb* cur ){
 int char_read( char *buf, Pcb* pc ){
 	return buf_read( buf, 0, pc );
 }
-
-//////////////////////////////////////////////////////////////
-////		The Below functions are not used...ever		//////
-//////////////////////////////////////////////////////////////
-void _ps2_keyboard_ready( void ){
-	while( (__inb(PS2_STAT) & 1) != 0 )
-		;
-}
-
-Uint _ps2_keyboard_read( void ){
-	
-	_ps2_keyboard_ready();
-	return __inb( PS2_PORT );
-}
-
-void _ps2_keyboard_write( Uint command ){
-	
-	_ps2_keyboard_clear();
-
-	// let the PS2 controller know we want to send a command to the mouse
-	//c_printf("Letting Mouse know we are sending a command...\n");
-	__outb( PS2_STAT, 0xD4 );
-	_ps2_keyboard_clear();
-
-	// Now, send the mouse our command
-	//c_printf("Sending Command: 0x%x...\n", ( b & 0xFF) );
-	__outb( PS2_PORT, command );
-}
-
-void _ps2_keyboard_clear( void ){
-	while ( 1 ){
-		Uint b = __inb(PS2_STAT);
-		if( (b & 16) != 0 )
-			return;
-	}
-}
-
 

@@ -235,6 +235,20 @@ static void _sys_read( Pcb *pcb ) {
 
 }
 
+/*
+** _sys_read_buf
+**
+**	So long as the user program's window has focus, characters will be read
+**	from the PS/2 device until either size characters are read, or a new-line
+**	is read.
+**
+** implements:	Status read_buf( char *buf, int size );
+**
+** Blocks the calling routine and queues it for PS/2 keyboard input.
+**
+** returns:
+**		nothing, the buffer the user passed is modified as a side-affect.
+*/
 static void _sys_read_buf( Pcb *pcb ){
 	
 	// temp vars
@@ -265,6 +279,32 @@ static void _sys_read_buf( Pcb *pcb ){
 	}
 }
 
+/*
+** _sys_read_char
+**
+**	Always writes two bytes to the buffer: the first byte is a status byte,
+**	with the following information:
+**		Bit 1	-	Control key is pressed down
+**		Bit 2	-	Alt key is pressed down
+**		Bit 3	-	Shift key is pressed down
+**		Bit 4-7	-	Reserved
+**	Note, the reserved bits have no guaranteed value.  The above bits will be
+**	set if the left or right keys are pressed.  The second character written
+**	is the character that was read from the keyboard. The character stored will
+**	be capitalized if shift is held down.  
+**
+**	The calling user will only get a "packet" of data back once the user
+**	pushes a valid ASCII character on the keyboard.  Hitting any of the
+**	modifier keys by themselves will not cause this function to return.
+**
+** implements:	Status read_char( char *buf );
+**
+** Blocks the calling routine and queues it for PS/2 keyboard input for a
+** single character and a status byte.
+**
+** returns:
+**		nothing, the buffer the user passed is modified as a side-affect.
+*/
 static void _sys_read_char( Pcb *pcb ){
 	
 	// temp vars

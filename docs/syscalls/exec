@@ -1,0 +1,27 @@
+EXEC() - DERP OS man page
+
+Name -------------------
+EXEC() - runs a new compiled program
+
+Synopsis ---------------
+
+#include "headers.h"
+
+STATUS exec( void* entry  );
+
+Description ------------
+
+This exec() function allow the new executable with a compile executable's 
+addresss. This is the low level why to creating different process with 
+different functionality. 
+
+Return Value -----------
+
+Will almost always return SUCCESS because of the operations it does.
+If a failure happens it will most likely panic
+
+Errors -----------------
+
+Two main types of error can occur data structure not being properly allocated.
+The other type is memory problem which will panic with a more detailed 
+message.

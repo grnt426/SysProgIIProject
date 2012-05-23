@@ -1,0 +1,30 @@
+fork( Pid* new ) - DERP OS man page
+
+Name -------------------
+fork( Pid* new ) - Makes a copy of the currently running process
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status fork( Pid* new );
+
+Description ------------
+
+The fork function copies a processes running stack to create an almost identical
+process which is set as a child of the orginal process. This can be used to 
+introduce new processes into DERP OS.
+
+Return Value -----------
+
+Returns SUCCESS to the both processes if correctly forked.
+Returns FAILUTRE to the parent process if forking new processes failed.
+
+Also returns a passed Pid* will to the orginal the new pid for the child 
+process, and will pass Pid* of 0 to the child process.
+
+Errors -----------------
+
+Error can occur when out of pcbs or memory.
+Pcb should return FAILURE and running out of usable memory will panic with
+a detailed error message.

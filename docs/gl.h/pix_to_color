@@ -1,0 +1,19 @@
+pix_to_color() - DERP OS man page
+
+Name -------------------
+pix_to_color() - pixel to Uint32
+
+Synopsis ---------------
+
+#include "gl.h"
+
+Uint32 pix_to_color( pixel p );
+
+Description ------------
+
+pix_to_color turns a pixel struct into a Uint32 for use with the versions 
+of functions that take a Uint32 instead of a pixel.
+
+Return Value -----------
+
+It returns the Uint32 value of the pixel.
