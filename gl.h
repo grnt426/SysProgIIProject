@@ -1,3 +1,11 @@
+/*
+** File:	gl.h
+**
+** Author:	Gideon Williams
+**
+** Description:	Graphics Libaray, used to draw anything 
+** and everything tom the screen or screen buffers.
+*/
 #ifndef _GL_H_
 #define _GL_H_
 
@@ -5,6 +13,10 @@
 
 //#define GL_DEBUG
 
+/*
+ * This struct is used to easily pack a pixel color.
+ *
+ */
 typedef struct pixel {
 	Uint8 b;
 	Uint8 g;

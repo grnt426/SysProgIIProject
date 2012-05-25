@@ -1,3 +1,14 @@
+/*
+** File:	vmem_ref.c
+**
+** Author:	Sean McDermott
+**
+** Contributor:
+**
+** Description:	This piece of code deals with counting share pages.
+**		The counting pages are done in a 4Mb pieace of memory
+*/
+
 #include "vmem_ref.h"
 #include "vmemL2.h"
 

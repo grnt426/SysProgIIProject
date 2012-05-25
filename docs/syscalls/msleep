@@ -1,0 +1,28 @@
+msleep() - DERP OS man page
+
+Name -------------------
+msleep() - puts the running process into the sleep queue for a specified time
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status msleep( Pcb *pcb );
+
+Description ------------
+
+The msleep() function take the running process and forces it off the running
+queues for a specificed period of time. This will place the Pcb the on sleep
+queue. The clock will wake the process up and resechule it after the period 
+of time has expired.
+
+Return Value -----------
+
+SUCCESS will be return after the process has been sleeping for the specified 
+time.
+The failure condition that will return FAILURE and print detailed error 
+messages. This error is caused being able to be scheduled.
+
+Errors -----------------
+
+Error will return a FAILURE message.

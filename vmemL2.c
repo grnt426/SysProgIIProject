@@ -1,3 +1,15 @@
+/*
+** File:	vmemL2.c
+**
+** Author:	Sean McDermott
+**
+** Contributor:
+**
+** Description:	Contains the code for common memory aplications 
+**		This will prompt doing these operations in a common way
+**		If there is any problem all calls can be fix once instead of all over the place
+*/
+
 #include "vmem.h"
 #include "vmemL2.h"
 

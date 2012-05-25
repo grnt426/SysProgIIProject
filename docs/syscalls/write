@@ -1,0 +1,29 @@
+write() - DERP OS man page
+
+Name -------------------
+write() - writes a single character to SIO
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status write( char buf );
+
+Description ------------
+
+The write() function takes a single character from the SIO Terminal. This 
+function writes the character to the terminal's out buffer and deals with
+starting terminal isr if needed.
+
+Return Value -----------
+
+Upon succesful completion it will return SUCCESS.
+
+Errors -----------------
+
+No error codes are used by this function.
+
+Known Issuess -----------
+
+If the terminal is used heavily and never has an empty outgoing queue. It can
+cause a buffer overflow.

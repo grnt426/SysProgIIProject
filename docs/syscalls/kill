@@ -1,0 +1,25 @@
+kill() - DERP OS man page
+
+Name -------------------
+kill() - takes a process out of the running queues
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status kill( Pid pid );
+
+Description ------------
+
+The kill() function terminates a proccess based on it Pid value. The process 
+will be marked as KILLED in the os. The when it is attempted to be scheudle
+the os is earse it and clean up shared resources.
+
+Return Value -----------
+
+Upon successfuly completion a SUCCESS status will be returned.
+
+Errors -----------------
+
+The function can also return an NOT_FOUND status, which means it cannot find
+a Pcb associate with that pid.

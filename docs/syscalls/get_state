@@ -1,0 +1,20 @@
+get_state() - DERP OS man page
+
+Name -------------------
+get_state() - retrieve the state of the current process
+
+Synopsis ---------------
+
+#include "get_state.h"
+
+void get_state( State *state );
+
+Description ------------
+
+Gets the current state of the calling process.
+
+state	-	A pointer to dump the state value from the process.
+
+Return Value -----------
+
+SUCCESS, always.

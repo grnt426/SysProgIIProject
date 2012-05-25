@@ -1,17 +1,37 @@
+/*
+** File:	gl_print.c
+**
+** Author:	Gideon Williams
+**
+** Description:	Implementations for the graphics library print functions.
+*/
 #include "gl_print.h"
 #include "gl.h"
 #include "font_define.h"
 
 static screen_info* scrn_info_arr;
 
+/**
+ * Static definitions.
+ */
 static void gl_scroll( unsigned int l, screen_info* curr_si );
 static void _gl_do_putchar( char c, screen_info* curr_si );
 static void _gl_do_putchar_at( unsigned int x, unsigned int y, char c, screen_info* curr_si );
 
+/**
+ * Initialization function for the gl_print library.
+ * 
+ */
 void gl_print_init( screen_info* ptr ) {
 	scrn_info_arr = ptr;
 }
 
+/**
+ * Sets the blocking flag for the specified buffer.
+ * 
+ * @param 	l			Number of lines to scroll.
+ * @param 	curr_si		Pointer to the screen info to scroll.
+ */
 static void gl_scroll( unsigned int l, screen_info* curr_si ) {
 	char* to = curr_si->lines[0];
 	char* from = curr_si->lines[1];
@@ -42,6 +62,11 @@ static void gl_scroll( unsigned int l, screen_info* curr_si ) {
 //////////
 // CHAR
 //////////
+/**
+ * Puts a character on the screen at the current cursor position.
+ * 
+ * @param 	c		Character to print.
+ */
 void gl_putchar( char c ) {
 
 	screen_info* curr_si;
@@ -53,11 +78,24 @@ void gl_putchar( char c ) {
 	_gl_do_putchar( c, curr_si );
 }
 
+/**
+ * Puts a character on the screen provided at the current cursor position.
+ * 
+ * @param 	c		Character to print.
+ * @param 	curr_si	Screen info to use when printing.
+ */
 void gl_putchar_s( char c, screen_info* curr_si ) {
 	_gl_do_putchar( c, curr_si );
 }
 
-
+/**
+ * Puts a character on the screen provided at the current cursor position.
+ *
+ * This is the actual function that does the lifting.
+ * 
+ * @param 	c		Character to print.
+ * @param 	curr_si	Screen info to use when printing.
+ */
 static void _gl_do_putchar( char c, screen_info* curr_si ) {
 	
 	/*
@@ -93,6 +131,13 @@ static void _gl_do_putchar( char c, screen_info* curr_si ) {
 	//TODO: set cursor
 }
 
+/**
+ * Puts a character on the screen provided at the provided position.
+ * 
+ * @param 	x		x position.
+ * @param 	y		y position.
+ * @param 	c		Character to print.
+ */
 void gl_putchar_at( unsigned int x, unsigned int y, char c ) {
 	screen_info* curr_si;
 	Pid pid = 0;
@@ -103,6 +148,16 @@ void gl_putchar_at( unsigned int x, unsigned int y, char c ) {
 	_gl_do_putchar_at( x, y, c, curr_si );
 }
 
+/**
+ * Puts a character on the screen provided at the provided position.
+ * 
+ * This is the actual function that puts something on the screen.
+ * 
+ * @param 	x		x position.
+ * @param 	y		y position.
+ * @param 	c		Character to print.
+ * @param 	curr_si	Screen info to use when printing.
+ */
 static void _gl_do_putchar_at( unsigned int x, unsigned int y, char c, screen_info* curr_si ) {
 	/*
 	** If x or y is too big or small, don't do any output.
@@ -113,6 +168,15 @@ static void _gl_do_putchar_at( unsigned int x, unsigned int y, char c, screen_in
 	}
 }
 
+/**
+ * Puts a string on the screen at the provided position.
+ * 
+ * This is the actual function that puts something on the screen.
+ * 
+ * @param 	x		x position.
+ * @param 	y		y position.
+ * @param 	str		String to print.
+ */
 void gl_puts_at(  unsigned int x, unsigned int y, char *str ){
 	unsigned int	ch;
 
@@ -121,6 +185,13 @@ void gl_puts_at(  unsigned int x, unsigned int y, char *str ){
 	}
 }
 
+/**
+ * Puts a string on the screen at the current cursor position.
+ * 
+ * This is the actual function that puts something on the screen.
+ * 
+ * @param 	str		String to print.
+ */
 void gl_puts( char *str ){
 	unsigned int	ch;
 
@@ -129,6 +200,14 @@ void gl_puts( char *str ){
 	}
 }
 
+/**
+ * Puts a string on the screen provided at the current cursor position.
+ * 
+ * This is the actual function that puts something on the screen.
+ * 
+ * @param 	str		String to print.
+ * @param 	curr_si	Screen info to use when printing.
+ */
 void gl_puts_s( char *str, screen_info* curr_si ){
 	unsigned int	c;
 

@@ -1,11 +1,13 @@
 /*
-** File:	vmem.h
+** File:	vmem_isr.h
 **
 ** Author:	Sean McDermott
 **
 ** Contributor:
 **
-** Description:	Virtual Memory Definitions
+** Description:	 These are definitions for the isrs dealing with virutal 
+**		memory. Also some helper functions to be used mainly by the
+**		isr.
 */
 
 #ifndef _VMEM_ISR_H

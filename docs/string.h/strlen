@@ -1,0 +1,25 @@
+strlen() - DERP OS man page
+
+Name -------------------
+strlen() - calculate the length of a string.
+
+Synopsis ---------------
+
+#include "string.h"
+
+void strlen( const char *s );
+
+Description ------------
+
+The strlen() function calculates the length of the string s, excluding the
+terminating null byte. 
+
+s	-	The string to calculate the length of
+
+Return Value -----------
+
+The strlen() function returns the number of characters in s.
+
+Source -----------------
+
+http://linux.die.net/man/3/strlen

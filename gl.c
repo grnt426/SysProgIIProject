@@ -1,15 +1,24 @@
+/*
+** File:	gl.c
+**
+** Author:	Gideon Williams
+**
+** Description:	Graphics Libaray, used to draw anything 
+** and everything tom the screen or screen buffers.
+*/
 #include "gl.h"
 #include "win_man.h"
 #include "vga_dr.h"
 #include "font.h"
 #include "gl_print.h"
-//#include "printf.h"
 #include "c_io.h"
 
 static screen_info* scrn_info_arr;
 static Uint32* video_mem_ptr;
 //static Uint32 buff_bytes_perline;
 static Uint32 bytes_perline;
+
+
 
 void _gl_init( void ) {
 	scrn_info_arr = get_screen_infos( );
@@ -22,6 +31,10 @@ void _gl_init( void ) {
 
 }
 
+/**
+ * User program to redraw the screen buffers to the screen.
+ * 
+ */
 void draw_active_screens() {
 	write('*');
 	//set_priority( PRIO_HIGH );
@@ -31,6 +44,10 @@ void draw_active_screens() {
 	}
 }
 
+/**
+ * Draws the active screen buffers to the screen once.
+ * 
+ */
 void draw_active_screens_once() {
 	Uint32* 		displayed;
 	Uint32*  		buffer_ptr;
@@ -96,6 +113,13 @@ void draw_active_screens_once() {
 ////////////////////////////
 //     LIBRARY FUNCS.
 ////////////////////////////
+/**
+ * Turns a pixel structure into a Uint32 that can be assigned
+ * directly to video memory.
+ * 
+ * @param 	p		The pixel struct to convert.
+ * @return			The Uint32 value containting the pixel.
+ */
 Uint32 pix_to_color(pixel p) {
 	Uint32 pix = p.a;
 	pix = (pix << 8) | p.r;
@@ -104,6 +128,15 @@ Uint32 pix_to_color(pixel p) {
 	return pix;
 }
 
+/**
+ * Draws a rectagle of the specified color at the coordinates
+ * 
+ * @param 	x1		Starting x.
+ * @param 	y1		Starting y.
+ * @param 	x2		Ending x.
+ * @param 	y2		Ending y.
+ * @param 	p		The color as a pixel struct.
+ */
 void draw_rect(Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, pixel p) {
 	Uint32			pix = 0;
 	screen_info* 	curr_si;
@@ -131,6 +164,17 @@ void draw_rect(Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, pixel p) {
 	}
 }
 
+/**
+ * Draws a line of the specified color at the coordinates.
+ * 
+ * Never tested.
+ *
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	x2		Ending x.
+ * @param 	y2		Ending y.
+ * @param 	p		The color as a pixel struct.
+ */
 void draw_line(Uint32 x, Uint32 y, Uint32 x2, Uint32 y2, pixel p) {
 	Uint32			pix = 0;
 	screen_info* 	curr_si;
@@ -168,6 +212,13 @@ void draw_line(Uint32 x, Uint32 y, Uint32 x2, Uint32 y2, pixel p) {
 ///////////////////////////////
 //	 	PIXEL FUNCTIONS
 ///////////////////////////////
+/**
+ * Draws a pixel of the specified color at the coordinates
+ * 
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a pixel struct.
+ */
 void draw_pixel(Uint32 x, Uint32 y, pixel p) {
 	Uint32			pix = 0;
 	Uint32*  			buffer_ptr;
@@ -201,12 +252,28 @@ void draw_pixel(Uint32 x, Uint32 y, pixel p) {
 	}
 }
 
+/**
+ * Draws a pixel of the specified color at the coordinates
+ * 
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a pixel struct.
+ * @param 	curr_si	The screen buffer to set the pixel on.
+ */
 void set_pixel(Uint32 x, Uint32 y, pixel p, screen_info* curr_si) {
 	if( x > curr_si->w || y > curr_si->h )
 		return;
 	set_pixel_int(x, y, pix_to_color ( p ), curr_si);
 }
 
+/**
+ * Draws a pixel of the specified color at the coordinates
+ * 
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a Uint32.
+ * @param 	curr_si	The screen buffer to set the pixel on.
+ */
 void set_pixel_int(Uint32 x, Uint32 y, Uint32 p, screen_info* curr_si) {
 	Uint32*			buffer_ptr;
 
@@ -219,6 +286,14 @@ void set_pixel_int(Uint32 x, Uint32 y, Uint32 p, screen_info* curr_si) {
 //         FONT FUNCS.
 ///////////////////////////////
 
+/**
+ * Draws a character of the specified color at the coordinates
+ * 
+ * @param 	c		Character to draw.
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a pixel struct.
+ */
 void draw_character(char c, Uint32 x, Uint32 y, pixel p) {
     int i = 0;
     Status s;
@@ -234,6 +309,17 @@ void draw_character(char c, Uint32 x, Uint32 y, pixel p) {
 	do_draw_character(c, x, y, p, curr_si);
 }
 
+/**
+ * Draws a character of the specified color at the coordinates
+ * 
+ *	Function that does the hheavy lifting.
+ *
+ * @param 	c		Character to draw.
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a pixel struct.
+ * @param 	curr_si	The screen buffer to set the pixel on.
+ */
 void do_draw_character(char c, Uint32 x, Uint32 y, pixel p, screen_info* curr_si) {
     unsigned char shift = 0x01;
     unsigned char* curr = 0;
@@ -255,6 +341,16 @@ void do_draw_character(char c, Uint32 x, Uint32 y, pixel p, screen_info* curr_si
     }
 }
 
+/**
+ * Draws a string of the specified color at the coordinates
+ * 
+ *	Function that does the hheavy lifting.
+ *
+ * @param 	str		Character to draw.
+ * @param 	x		Starting x.
+ * @param 	y		Starting y.
+ * @param 	p		The color as a pixel struct.
+ */
 void draw_string( char* str, Uint32 x, Uint32 y, pixel p) {
     char c = 0;
     int i = 0;
@@ -286,6 +382,10 @@ void draw_string( char* str, Uint32 x, Uint32 y, pixel p) {
 /////////////////////////////
 //		USER PROGRAMS
 /////////////////////////////
+//
+// These functions just test 
+// features of the gl library
+//
 /////////////////////////////
 
 void draw_scr_0() {

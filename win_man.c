@@ -1,3 +1,13 @@
+/*
+** File:	win_man.c
+**
+** Author:	Gideon Williams
+**
+** Contributor: Grant Kurtz
+**
+** Description:	Window manager implementation. This handles the 
+** graphics buffers and the input to the user programs.
+*/
 #include "headers.h"
 #include "win_man.h"
 #include "vga_dr.h"
@@ -7,7 +17,7 @@
 #include "vmemL2.h"
 #include "klib.h"
 
-//TODO: build a struct for the wm_memory
+
 static win_man_vars*	wm_memory;
 static screen_info* 	screen_info_arr;
 

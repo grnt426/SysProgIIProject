@@ -1,0 +1,21 @@
+set_priority() - DERP OS man page
+
+Name -------------------
+
+set_priority() - change the priority of the current process.
+
+Synopsis ---------------
+
+#include "headers.h"
+
+void set_priority( Prio prio );
+
+Description ------------
+
+Will attempt to change the priority of the calling process to the value provided.
+
+prio	-	The new priority to set our for our process.
+
+Return Value -----------
+
+The success of the update change.

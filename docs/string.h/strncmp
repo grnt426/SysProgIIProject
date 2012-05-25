@@ -1,0 +1,34 @@
+strncmp() - DERP OS man page
+
+Name -------------------
+
+strncmp() - compare two strings.
+
+Synopsis ---------------
+
+#include "string.h"
+
+void strncmp( const char *s1, const char *s2 );
+
+Description ------------
+
+The strcmp() function compares the two strings s1 and s2. It returns an
+integer less than, equal to, or greater than zero if s1 is found, respectively,
+to be less than, to match, or be greater than s2.
+
+The strncmp() function is similar, except it only compares the first (at most)
+n characters of s1 and s2.
+
+s1	-	The string to compare against.
+
+s2	-	The string to compare with.
+
+Return Value -----------
+
+The strcmp() and strncmp() functions return an integer less than, equal
+to, or greater than zero if s1 (or the first n bytes thereof) is found,
+respectively, to be less than, to match, or be greater than s2.
+
+Source -----------------
+
+http://linux.die.net/man/3/strncmp

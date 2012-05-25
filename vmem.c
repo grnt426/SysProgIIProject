@@ -5,7 +5,8 @@
 **
 ** Contributor:
 **
-** Description:
+** Description: This file contains all the code for the first level of virtual memory.
+**		This setup code sets memory to use as mangment structures.
 */
 
 #include "startup.h"

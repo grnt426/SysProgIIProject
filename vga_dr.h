@@ -1,31 +1,19 @@
 /*
-** VGA Driver initialization code
+** File:	vga_dr.h
+**
+** Author:	Gideon Williams
+**
+** Description:	VESA and VGA mode setting functions and types.
+**
+** The structs were copied from:
+** 			http://www.delorie.com/djgpp/doc/ug/graphics/vesa
 */
-
 #ifndef _VGA_H
 #define _VGA_H
 
 #include "headers.h"
 
-/*
-** General (C and/or assembly) definitions
-*/
-
 #ifndef __ASM__20113__
-
-/*
-** Start of C-only definitions
-*/
-
-/*
-** Types
-*/
-
-/*
-** Globals
-**
-** From http://www.delorie.com/djgpp/doc/ug/graphics/vesa.
-*/
 
 	typedef struct VESA_INFO
 	{ 
@@ -90,18 +78,11 @@
 		unsigned char 	RsvdFPos;
 		unsigned char 	Reserved[194];
 	}  __attribute__ ((packed)) MODE_INFO;
-/*
-** Prototypes
-*/
+
 
 VESA_INFO *vga_vesa_info;
 MODE_INFO *vga_mode_info;
 
-/*
-** _vga_init()
-**
-** initialize the VGA driver module
-*/
 void _vga_init( void );
 
 void clear_display( void );

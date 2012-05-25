@@ -1,0 +1,23 @@
+get_time() - DERP OS man page
+
+Name -------------------
+get_time() - This function get the system's time
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status get_time( Time *time);
+
+Description ------------
+
+The get_time() function gets the current system time. This will store the time
+into the provided pointer. 
+
+Return Value -----------
+
+Upon successful completion it will return SUCCESS.
+
+Errors -----------------
+
+None

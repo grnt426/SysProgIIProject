@@ -1,3 +1,14 @@
+/*
+** File:	win_man.h
+**
+** Author:	Gideon Williams
+**
+** Contributor: Grant Kurtz
+**
+** Description:	Window manager definitions. This handles the 
+** graphics buffers and the input to the user programs.
+*/
+
 #ifndef _WIN_MAN_H_
 #define _WIN_MAN_H_
 
@@ -12,6 +23,12 @@
 typedef void (*mouse_handler)(Uint8 x_pos, Uint8 y_pos, char left, char right,
 		char middle);
 
+/*
+** screen_info struct
+**
+**	Desc: This is the struct that stores the information for hte screen buffers
+** 		  ,there is one of these for every buffer.   
+*/
 typedef struct screen_info
 {
 	Uint32	buf_num;
@@ -33,7 +50,11 @@ typedef struct screen_info
 	mouse_handler	handler;
 }	screen_info;
 
-//to be 1024b
+/*
+** win_man_vars struct
+**
+**	Desc: this is used to keep the wm_memory tidy.   
+*/
 typedef struct win_man_vars
 {
 	Uint32 	active_quad;

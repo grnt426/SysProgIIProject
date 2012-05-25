@@ -1,3 +1,13 @@
+/*
+** File:	vmemL2.h
+**
+** Author:	Sean McDermott
+**
+** Contributor:
+**
+** Description:	These are the definitions for common  memory operations
+*/
+
 #ifndef _VMEML2_H
 #define _VMEML2_H
 //#define _VMEML2_DEBUG

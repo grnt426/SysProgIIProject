@@ -1,0 +1,68 @@
+PS/2 Development Experiences, Grant Kurtz
+
+After deciding to move away from PATA/IDE devices because of all the
+similarites with non-AHCI SATA drivers (which another team mate was working
+on), I picked up PS/2 devices to provide our OS with a real terminal and
+mouse input. By this point, I was already behind by about a week in terms
+of research, but I didn't think it would impact me significantly.  All the
+documentation I found made PS/2 seems like a walk in the park, opening up
+the possibilities to do other devices or something more exciting when I got
+it all implemented and working early.
+
+Unfortunately, that isn't how PS/2 development went.  While I enjoyed figuring
+out how to integrate such a central device into our OS in a standard and
+intuitive way, I did not enjoy spending all the time I did trying to determine
+which of the several documentations were correct, or trying to peice all the
+different documentations together to get a complete working picture of the
+device and interfacing with it.  The mouse took a week of troubleshooting
+to finally get working and refined, and was never integrated with the OS.
+The primary reason was a lack of signals or a convenient alternative.
+The keyboard would have been easier to implement had I realized sooner that
+I did not need to do some kind of voodoo init setup and only had to install
+the ISR.  Before I sunk too much time into trying to get the settings of
+the PS/2 keyboard to be different and the modifier key lights to change, I
+decided that having a working read_buf function that was properly integrated
+to allow control over our window manager.  Ben's SATA driver and FS shell were
+great user programs to show off the stability and usability of my system calls.
+
+The actual development of the driver after getting past initialization
+was quite easy.  An interrupt would come in and I would process and filter
+the character to differentiate it from system reserved keys and user input.
+After the number of characters read equaled the number of characters requested
+or a new-line was read the process was rescheduled for running and removed from
+the blocking IO queue. The user program could also request a special input
+"mode" (the read_char function) that returned singular characters along with
+a status byte of any modifier keys that were held down when the character
+was pressed. This second function acted as an opposite to buffered input to
+provide the user program more control over what was printed to the screen
+(like in the case of password prompts), as well as enabling simple features
+like saving (making use of checking that the control flag was set and the d or
+s character was pressed) without the overhead and infrastructure of signals.
+This function allowed for an unlimited number of bytes to be read in with
+subsequent calls to the read_char function.
+
+If I had more time, I would have definitely researched more refined and
+physics based mouse control to provide a better feel of acceleration and
+properly scaled velocity/positioning.  I actually really enjoyed trying
+to figure out how to properly scale the mouse movement to single-character
+width resolution.  The challenge is greater when only single characters can
+be printed instead of single pixels because you need to properly contain and
+magnify large and small changes.  If you don't magnify small changes enough,
+the mouse won't appear to move until too large of a distance is traveled.
+Conversely, if small movements are magnified too greatly the 'plus sign'
+cursor I used would appear to zip around and accelerate too quickly. Looking
+into implementing signals or a better method of integrating mouse input into
+user programs would have also better ensured that the PS/2 mouse could have
+been integrated.
+
+I feel like PS/2 device development should have been much simpler, and that
+perhaps I had missed some kind of important authoritative document that would
+have made the process much easier. Regardless, I had successfully integrated
+keyboard input with user programs and reserved several keys for the system to
+control window focusing and process foreground selection. Without the use of
+signals, I was able to provide a user program with controls such as ctrl-D
+to end infinite character input, as was used in Ben's write function when
+writing to files.  I feel like this novel (well, novel to me) approach to
+providing input from the keyboard was incredibly simple and still flexible
+enough to enable meta-input.
+

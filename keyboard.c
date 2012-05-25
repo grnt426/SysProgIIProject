@@ -92,6 +92,10 @@ static char win_pressed = 0;
 // Used to await another byte for an extended key
 static char await_next = 0;
 
+
+/**
+ * Just prepares the isr-callback and IO-request array.
+ */
 void _ps2_keyboard_init( void ){
 
 	// temp vars

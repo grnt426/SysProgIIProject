@@ -1,0 +1,21 @@
+set_time() - DERP OS man page
+
+Name -------------------
+set_time() - change the current system time
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status set_time( Time time );
+
+Description ------------
+
+Overrides the current _system_time to the provided value.
+
+time	-	The new time value.
+
+Return Value -----------
+
+SUCCESS, always.
+

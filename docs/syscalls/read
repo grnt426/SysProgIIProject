@@ -1,0 +1,23 @@
+read() - DERP OS man page
+
+Name -------------------
+read() - gets a single character from the SIO
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status read( Pcb *pcb );
+
+Description ------------
+
+The read() function reads a character fomr the SIO terminal and copies it into 
+the provided pointer. THis function will block if there is no imput on from the 
+SIO device. This function is a first come first serve reading of the serial
+device. All input is not replicated from each process.
+
+Return Value -----------
+
+Upon successful completion it will return an the character place into the pointer
+provided.
+

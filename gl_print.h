@@ -1,3 +1,10 @@
+/*
+** File:	gl_print.h
+**
+** Author:	Gideon Williams
+**
+** Description:	Definitions for the graphics library print functions.
+*/
 #ifndef _GL_PRINT_H_
 #define _GL_PRINT_H_
 

@@ -1,4 +1,11 @@
 /*
+** File:	vga_dr_S.S
+**
+** Author:	Gideon Williams
+**
+** Description:	This file holds the functions to retrieve the vesa and mode 
+**				information for the bios.
+**
 ** http://www.delorie.com/djgpp/doc/ug/graphics/vesa.html
 */
 #include "vga_define.h"

@@ -1,0 +1,13 @@
+﻿Group Experiences, Derp OS - Team 2
+
+
+Source Control
+For source control our group used Git.  We made heavy use of branching and avoiding all development on the develop/master branches.  Every time a major feature was to be developed or any kind of major testing all work was done in branches.  Merging of the feature branches was almost always painless, with only a couple expected conflicts.  Usually those conflicts were in the Makefile or other ancillary files not directly related to the project itself. The source control played a major role in keeping our project organized and each group member working efficiently on their own projects without worry from other teammates breaking code.
+
+
+Communication
+Our group’s communication follows an inverted bell-curve.  There was a lot during the initial planning stages, idea generation, and for the first week of development when not much coding was being done.  When real work was starting to take off, weeks 6 through 8, our communication really dropped.  Our group tried to catch back up in the later half of week 9 but it took a lot more work.  The features we originally planned were changed by the individuals working on them and those changes weren’t always communicated.  All the original documentation that was created and supposed to be used as a guide wasn’t really used.  This isn’t necessarily a bad thing, as a lot of the documentation had to be changed and was too difficult to keep up to date and relevant.  During week 10 and exam week we were all working much more closely and the project was kept on track.
+
+
+Integration
+Integration was not as easy as planned, but this was not because of source control issues.  If anything, the source control scheme we had greatly helped, as test branches could be made to do quick integrations to get an idea of how the integration would go and what to fix for the real integration.  The biggest hurdle to integration was the graphics and virtual memory.  These two sections were deeply coupled with the OS, and caused problems when the SATA driver and the keyboard driver tried to interact.  Most of the issues encountered were virtual memory not properly mapping memory and graphics making system calls while inside interrupts (causing some fun stack smashing and triple-faults).

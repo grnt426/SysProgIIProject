@@ -1,7 +1,10 @@
 /*
-** VGA Driver initialization code
+** File:	vga_dr.c
+**
+** Author:	Gideon Williams
+**
+** Description:	VESA and VGA mode setting functions.
 */
-
 #define	__KERNEL__20113__
 
 #include "headers.h"
@@ -9,35 +12,10 @@
 #include "vga_define.h"
 
 /*
-** PRIVATE DEFINITIONS
+** _vga_init()
+**
+** initialize the VGA driver module
 */
-
-/*
-** PRIVATE DATA TYPES
-*/
-
-/*
-** PRIVATE GLOBAL VARIABLES
-*/
-
-/*
-** PUBLIC GLOBAL VARIABLES
-*/
-
-
-/*
-** PRIVATE FUNCTIONS
- */
-
-/*
- ** PUBLIC FUNCTIONS
- */
-
-/*
- ** _vga_init()
- **
- ** initialize the vga module
- */
 void _vga_init( void ) {
 	//Check the contents of the information extracted from REAL MODE 
 	vga_vesa_info = (VESA_INFO *)(VESA_INFO_ADDR << 4);
@@ -48,15 +26,29 @@ void _vga_init( void ) {
 	#endif
 }
 
+/**
+ * Gets the starting address of the linear buffer/video memory.
+ * 
+ * @return			The pointer to the start of video meory.
+ */
 Uint32* _vga_get_start_mem( void ) {
 	return (Uint32 *)(vga_mode_info->PhysBasePtr);
 }
 
+/**
+ * Gets the ending address of the linear buffer/video memory.
+ * 
+ * @return			The pointer to the end of video meory.
+ */
 Uint32* _vga_get_end_mem( void ) {
 	//setup my buffer space @ PhysBasePtr + TotalMemory
 	return (Uint32 *)(vga_mode_info->PhysBasePtr + (vga_vesa_info->TotalMemory * 64 * 1024));
 }
-	
+
+/**
+ * Debug function that prints a lot of important stuffz. XD
+ * 
+ */
 void _vga_print_info( void ) {
 	#ifdef VGA_DEBUG
 	c_printf("\nVESA_INFO(%x):\n", vga_vesa_info);
@@ -84,7 +76,10 @@ void _vga_print_info( void ) {
 	#endif	
 }
 
-//Main draw program
+/**
+ * Utility function to clear the screen.
+ * 
+ */
 void clear_display( void ) {
 	Uint32 *ptr = (Uint32*)(vga_mode_info->PhysBasePtr);
     int i = 0;

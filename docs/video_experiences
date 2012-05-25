@@ -1,6 +1,56 @@
 Video Experience
+-----------------------------
 
-The intial step for setting up any sort of video was looking at vga and bios mode setting. I the looked at VESA mode setting and decided that VBE, the vesa spec, had everything that I would need. 
+	The intial step for setting up any sort of video was looking at vga and 
+bios mode setting. I the looked at VESA mode setting and decided that VBE, the 
+vesa spec, had everything that I would need. 
 
 Steps:
-1) I 
+-----------------------------
+1) I set the video mode to a mode with the specs I wanted.
+
+2) I obtain the vesa mode info and the vga mode info and store them in the 
+	lower one meg of memory.
+	
+3) Then we switch to protected mode and access the static address in the lower
+	one meg of memory.
+	
+4) The next fonction of mine that gets run is win_man_init.
+	i) This function initializes vga ang GL as well as setup all of the memory
+		address required to do any kind of graphics.
+		
+5) From here it was all writing library function to enable the user programs 
+	to put things on the screen.
+
+I found steps 1 through 3 hard to figure out, beyond step 3 I enjoyed designing
+the window manager and figureing out how to render text. This was the easy part
+but at the same time the fun part, because they were puzzles I knew how to fix.
+
+Basic design thoughts:
+-----------------------------
+When designing the window manager I wanted to make a design that lended itself
+to later expansion. I set it up so that every user program got its own buffer,
+and its own information block. This allowed me to just keep building features 
+since anything I added would automatically be in a central location as well as 
+be easy to change. Having the sperate buffers and information blocks allowed me
+to plan for moving windows. All I would need to do would be add a Z position or
+clip plane and then also add an X and Y position. This would allow me to manage
+the mouse clicks and drawing the top window as simple as some trivial math.
+
+Some feature that I wanted but couldn't get to:
+-----------------------------
+1) Create an open_gl like state machine.
+2) Rebuild my GL to remember the things drawn, allowing redrawing and much more
+3) Windows
+4) Mouse integration ( this was a limitation with the first mouse driver)
+
+Synopsis:
+-----------------------------
+All in all I realy enjoyed this class. I think that given more time working on
+on it I could get a lot of really awesome feature done. I felt like this class
+was pretty perfect. The only thing that might be interesting is if there was a
+required early release demo. maybe mid quarter. It would force people to spend
+more time on the project early on in the quarter.
+
+Thanks,
+-Gideon Williams

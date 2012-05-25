@@ -12,14 +12,6 @@
 #define	__KERNEL__20113__
 #define	__ASM__20113__
 
-/*
-** _vmem_turnon
-** Description: This function does the turning on paging. This sets the first 
-**		page directory and enbales 4MB paging
-** Arguments:
-** Returns: 
-**
-*/
 	.globl	_vmem_turnon
 _vmem_turnon:
         enter   $0,$0

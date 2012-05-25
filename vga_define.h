@@ -1,5 +1,9 @@
 /*
-** Defines for the VGA Driver
+** File:	vga_define.h
+**
+** Author:	Gideon Williams
+**
+** Description:	Defines for the VGA Driver
 */
 
 #define VGA_DEBUG

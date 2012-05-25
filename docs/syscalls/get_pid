@@ -1,0 +1,23 @@
+get_pid - DERP OS man page
+
+Name -------------------
+get_pid() - return the id of the running process
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status get_pid( Pid *pid );
+
+Description ------------
+
+The get_pid() function takes the running process and extracts the id. The id
+is then stored into the pointer provided.
+
+Return Value -----------
+
+Upon successful return it will return SUCCESS
+
+Errors -----------------
+
+None

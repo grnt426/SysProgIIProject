@@ -1,0 +1,24 @@
+get_priority() - DERP OS man page
+
+Name -------------------
+get_priority() - gets which process priority it has
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status get_priority ( Prio *prio );
+
+Description ------------
+
+The get_priority() function gets the running process's priority. Returns the 
+priority to the pointer passed in.
+
+Return Value -----------
+
+
+Upon successful completetion it will return SUCCESS
+
+Errors -----------------
+
+None

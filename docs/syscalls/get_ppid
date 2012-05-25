@@ -1,0 +1,23 @@
+get_ppid - DERP OS man page
+
+Name -------------------
+get_ppid() - return the id parent process of the running process
+
+Synopsis ---------------
+
+#include "headers.h"
+
+Status get_ppid( Pid *pid );
+
+Description ------------
+
+The get_ppid() function takes the running process and extracts the parent 
+process it. The parent process id is stored into the pointer provided.
+
+Return Value -----------
+
+Upon successful return it will return SUCCESS
+
+Errors -----------------
+
+None

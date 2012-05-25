@@ -1,3 +1,14 @@
+/*
+** File:	vmem_ref.h
+**
+** Author:	Sean McDermott
+**
+** Contributor:
+**
+** Description:	These are definitions for counting share pages.
+**		Defines are ways of getting values out of a 32 bit word
+*/
+
 #ifndef _VMEM_REF_H
 #define _VMEM_REF_H
 //#define _VMEM_REF_DEBUG
